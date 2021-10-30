@@ -5,10 +5,10 @@
 JSONPath WG                                              S. Gössner, Ed.
 Internet-Draft                                   Fachhochschule Dortmund
 Intended status: Standards Track                      G. Normington, Ed.
-Expires: 28 April 2022                                                  
+Expires: 3 May 2022                                                     
                                                          C. Bormann, Ed.
                                                   Universität Bremen TZI
-                                                         25 October 2021
+                                                         30 October 2021
 
 
                   JSONPath: Query expressions for JSON
@@ -17,18 +17,19 @@ Expires: 28 April 2022
 Abstract
 
    JSONPath defines a string syntax for identifying values within a
-   JavaScript Object Notation (JSON) document.
+   JavaScript Object Notation (JSON, RFC 8259) value.
 
-Contributing
+Discussion Venues
 
-   This document picks up the popular JSONPath specification dated
-   2007-02-21 and provides a normative definition for it.  In its
-   current state, it is a strawman document showing what needs to be
-   covered.
+   This note is to be removed before publishing as an RFC.
 
-   Comments and issues may be directed to this document's github
-   repository (https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-
-   jsonpath).
+   Discussion of this document takes place on the JSON Path Working
+   Group mailing list (jsonpath@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/jsonpath/
+   (https://mailarchive.ietf.org/arch/browse/jsonpath/).  Source for
+   this draft and an issue tracker can be found at https://github.com/
+   ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath (https://github.com/
+   ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath).
 
 Status of This Memo
 
@@ -45,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 April 2022.
+   This Internet-Draft will expire on 3 May 2022.
 
 Copyright Notice
 
@@ -99,19 +100,16 @@ Table of Contents
 
 1.  Introduction
 
-   This document picks up the popular JSONPath specification dated
-   2007-02-21 [JSONPath-orig] and provides a normative definition for
-   it.  In its current state, it is a strawman document showing what
-   needs to be covered.
-
-   JSON is defined by [RFC8259].
+   JavaScript Object Notation (JSON, [RFC8259]) is a popular
+   representation format for structured data values.  JSONPath defines a
+   string syntax for identifying values within a JSON value.
 
    JSONPath is not intended as a replacement, but as a more powerful
-   companion, to JSON Pointer [RFC6901]. [insert reference to section
-   where the relationship is detailed.  The purposes of the two syntaxes
-   are different.  Pointer is for isolating a single location within a
-   document.  Path is a query syntax that can also be used to pull
-   multiple locations.]
+   companion, to JSON Pointer [RFC6901].
+   // Insert reference to section where the relationship is detailed.
+   // The purposes of the two syntaxes are different.  Pointer is for
+   // isolating a single location within a document.  Path is a query
+   // syntax that can also be used to pull multiple locations.
 
 1.1.  Terminology
 
@@ -1219,11 +1217,6 @@ Semantics
 
    [E4X]      ISO, "Information technology — ECMAScript for XML (E4X)
               specification", ISO/IEC 22537:2006 , 2006.
-
-   [E4X-overview]
-              Adobe Systems Inc., The Mozilla Foundation, Opera Software
-              ASA, and others, "Proposed ECMAScript 4 Edition — Language
-              Overview", 2007.
 
    [ECMA-262] Ecma International, "ECMAScript Language Specification,
               Standard ECMA-262, Third Edition", December 1999,

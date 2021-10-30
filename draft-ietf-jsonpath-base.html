@@ -10,7 +10,7 @@
 <meta content="Carsten Bormann" name="author">
 <meta content="
        JSONPath defines a string syntax for identifying values
-within a JavaScript Object Notation (JSON) document. 
+within a JavaScript Object Notation (JSON, RFC 8259) value. 
     " name="description">
 <meta content="xml2rfc 3.10.0" name="generator">
 <meta content="JSON" name="keyword">
@@ -35,9 +35,173 @@ within a JavaScript Object Notation (JSON) document.
 -->
 <link href="draft-ietf-jsonpath-base.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
-<style type="text/css">@import url('https://martinthomson.github.io/i-d-template/fonts.css');
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
-html {
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
   --background-color: #fff;
   --text-color: #222;
   --title-color: #191919;
@@ -47,20 +211,8 @@ html {
   --pilcrow-weak: #ddd;
   --pilcrow-strong: #bbb;
   --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
   scrollbar-color: #bbb #eee;
-}
-@media (prefers-color-scheme: dark) {
-html {
-  --background-color: #121212;
-  --text-color: #f0f0f0;
-  --title-color: #fff;
-  --link-color: #4da4f0;
-  --highlight-color: #282828;
-  --line-color: #444;
-  --pilcrow-weak: #444;
-  --pilcrow-strong: #666;
-  scrollbar-color: #777 #333;
-}
 }
 body {
   max-width: 600px;
@@ -77,19 +229,25 @@ body {
 }
 
 /* headings */
-#title, h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: "Cabin Condensed", sans-serif;
   font-weight: 600;
   margin: 0.8em 0 0.3em;
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-#title {
-  padding: 1em 0 0.2em;
+h1#title {
   font-size: 32px;
   line-height: 40px;
   clear: both;
 }
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
 h1, h2, h3 {
   font-size: 22px;
   line-height: 27px;
@@ -103,10 +261,15 @@ h4, h5, h6 {
 .author {
   padding-bottom: 0.3em;
 }
-#abstract+p, #abstract+p code, #abstract+p samp, #abstract+p tt {
+#abstract+p {
   font-size: 18px;
   line-height: 24px;
 }
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
 p {
   padding: 0;
   margin: 0.5em 0;
@@ -142,6 +305,10 @@ div {
 }
 svg {
   display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
 }
 .alignCenter.art-text {
   background-color: var(--highlight-color);
@@ -237,7 +404,13 @@ a.xref {
 /* Figures */
 tt, code, pre {
   background-color: var(--highlight-color);
-  font: 14px/22px 'Oxygen Mono', monospace;
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines */
+  line-height: 0;
 }
 pre {
   border: 1px solid var(--line-color);
@@ -263,17 +436,22 @@ figcaption, caption {
   text-align: left;
 }
 @media screen {
-  pre {
+  pre, svg {
     display: inline-block;
     overflow-x: auto;
+  }
+  pre {
     max-width: 100%;
     width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
   }
   figure pre {
     display: block;
     width: calc(100% - 25px);
   }
-  pre + .pilcrow {
+  pre + .pilcrow, svg + .pilcrow {
     display: inline-block;
     vertical-align: text-bottom;
     padding-bottom: 8px;
@@ -287,9 +465,6 @@ aside, blockquote {
   font-style: italic;
 }
 blockquote {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
   margin: 1em 0;
 }
 cite {
@@ -832,6 +1007,34 @@ address div.right {
   font-weight: bold;
   font-size: 0.9em;
 }
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+/* Trick: a prefix match works because only black and white are allowed */
+svg [stroke="black"], svg [stroke^="#000"] {
+  stroke: var(--text-color);
+}
+svg [stroke="white"], svg [stroke^="#fff"] {
+  stroke: var(--background-color);
+}
+svg [fill="black"], svg [fill^="#000"], svg :not([fill]) {
+  fill: var(--text-color);
+}
+svg [stroke="fill"], svg [fill^="#fff"] {
+  fill: var(--background-color);
+}
+}
 </style>
 
 </head>
@@ -844,7 +1047,7 @@ address div.right {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gössner, et al.</td>
-<td class="center">Expires 28 April 2022</td>
+<td class="center">Expires 3 May 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -857,12 +1060,12 @@ address div.right {
 <dd class="internet-draft">draft-ietf-jsonpath-base-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-10-25" class="published">25 October 2021</time>
+<time datetime="2021-10-30" class="published">30 October 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-04-28">28 April 2022</time></dd>
+<dd class="expires"><time datetime="2022-05-03">3 May 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -886,18 +1089,18 @@ address div.right {
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
 <p id="section-abstract-1">JSONPath defines a string syntax for identifying values
-within a JavaScript Object Notation (JSON) document.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+within a JavaScript Object Notation (JSON, RFC 8259) value.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
-<section class="note" id="section-note.1">
-      <h2 id="name-contributing">
-<a href="#name-contributing" class="section-name selfRef">Contributing</a>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-discussion-venues">
+<a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
       </h2>
-<p id="section-note.1-1">This document picks up the popular JSONPath specification dated
-2007-02-21 and provides a normative definition for it.
-In its current state, it is a strawman document showing what needs to
-be covered.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
-<p id="section-note.1-2">Comments and issues may be directed to this document's
-<a href="https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath">github repository</a>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">Discussion of this document takes place on the
+JSON Path Working Group mailing list (jsonpath@ietf.org),
+which is archived at <a href="https://mailarchive.ietf.org/arch/browse/jsonpath/">https://mailarchive.ietf.org/arch/browse/jsonpath/</a>.
+Source for this draft and an issue tracker can be found at
+<a href="https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath">https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath</a>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -918,7 +1121,7 @@ be covered.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 April 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 May 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1067,24 +1270,24 @@ be covered.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">This document picks up the popular JSONPath specification dated
-2007-02-21 <span>[<a href="#JSONPath-orig" class="xref">JSONPath-orig</a>]</span> and provides a normative definition for it.
-In its current state, it is a strawman document showing what needs to
-be covered.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">JSON is defined by <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">JSONPath is not intended as a replacement, but as a more powerful
-companion, to JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span>. [insert reference to section
-where the relationship is detailed.  The purposes of the two syntaxes
-are different. Pointer is for isolating a single location within a
-document. Path is a query syntax that can also be used to pull multiple locations.]<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-1">JavaScript Object Notation (JSON, <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span>) is a popular representation
+format for structured data values.
+JSONPath defines a string syntax for identifying values
+within a JSON value.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">JSONPath is not intended as a replacement, but as a more powerful
+companion, to JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span>. <span class="cref" id="json-pointer-missing">Insert reference to section where the relationship is detailed.
+The purposes of the two syntaxes are different.
+Pointer is for isolating a single location within a document.
+Path is a query syntax that can also be used to pull multiple
+locations.</span><a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
         <h3 id="name-terminology">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
         </h3>
-<p id="section-1.1-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
-"MAY", and "OPTIONAL" in this document are to be interpreted as
+<p id="section-1.1-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL</span>
+NOT", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
 described in BCP 14 <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="xref">RFC8174</a>]</span> when, and only when, they
 appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2">The grammatical rules in this document are to be interpreted as ABNF,
@@ -1614,8 +1817,8 @@ constant.<a href="#section-2-3" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-3.1-1">A JSONPath query is a string which selects zero or more nodes of a piece of JSON.
 A valid query conforms to the ABNF syntax defined by this document.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">A query MUST be encoded using UTF-8. To parse a query according to
-the grammar in this document, its UTF-8 form SHOULD first be decoded into
+<p id="section-3.1-2">A query <span class="bcp14">MUST</span> be encoded using UTF-8. To parse a query according to
+the grammar in this document, its UTF-8 form <span class="bcp14">SHOULD</span> first be decoded into
 Unicode code points as described
 in <span>[<a href="#RFC3629" class="xref">RFC3629</a>]</span>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">A string to be used as a JSONPath query needs to be <em>well-formed</em> and
@@ -1702,7 +1905,7 @@ json-path = root-selector *(dot-selector        /
 but it also produces as output a list consisting of one
 node: the argument itself.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 <p id="section-3.4-2">A selector may select zero or more nodes for further processing.
-A syntactically valid selector MUST NOT produce errors.
+A syntactically valid selector <span class="bcp14">MUST NOT</span> produce errors.
 This means that some
 operations which might be considered erroneous, such as indexing beyond the
 end of an array,
@@ -1776,7 +1979,7 @@ of node.<a href="#section-3.4-12" class="pilcrow">¶</a></p>
             <h5 id="name-syntax-2">
 <a href="#name-syntax-2" class="section-name selfRef">Syntax</a>
             </h5>
-<p id="section-3.5.1.1-1">Every valid JSONPath query MUST begin with the root selector <code>$</code>.<a href="#section-3.5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.1.1-1">Every valid JSONPath query <span class="bcp14">MUST</span> begin with the root selector <code>$</code>.<a href="#section-3.5.1.1-1" class="pilcrow">¶</a></p>
 <div id="section-3.5.1.1-2">
 <pre class="lang-abnf sourcecode">
 root-selector  = "$"
@@ -1822,7 +2025,7 @@ ALPHA           =  %x41-5A / %x61-7A    ; A-Z / a-z
 </div>
 <p id="section-3.5.2.1-3">Member names containing other characters than allowed by
 <code>dot-selector</code> -- such as space ` ` and minus <code>-</code>
-characters -- MUST NOT be used with the <code>dot-selector</code>.
+characters -- <span class="bcp14">MUST NOT</span> be used with the <code>dot-selector</code>.
 (Such member names can be addressed by the
 <code>index-selector</code> instead.)<a href="#section-3.5.2.1-3" class="pilcrow">¶</a></p>
 </section>
@@ -1957,7 +2160,7 @@ DIGIT1          = %x31-39                         ; 1-9 non-zero digit
             <h5 id="name-semantics-5">
 <a href="#name-semantics-5" class="section-name selfRef">Semantics</a>
             </h5>
-<p id="section-3.5.4.2-1">A <code>quoted-member-name</code> string MUST be converted to a
+<p id="section-3.5.4.2-1">A <code>quoted-member-name</code> string <span class="bcp14">MUST</span> be converted to a
 member name by removing the surrounding quotes and
 replacing each escape sequence with its equivalent Unicode character, as
 in the table below:<a href="#section-3.5.4.2-1" class="pilcrow">¶</a></p>
@@ -2245,13 +2448,13 @@ END IF
 </pre><a href="#section-3.5.6.2.2-12" class="pilcrow">¶</a>
 </div>
 <p id="section-3.5.6.2.2-13">When <code>step = 0</code>, no elements are selected and the result array is empty.<a href="#section-3.5.6.2.2-13" class="pilcrow">¶</a></p>
-<p id="section-3.5.6.2.2-14">An implementation MUST raise an error if any of the slice expression parameters
+<p id="section-3.5.6.2.2-14">An implementation <span class="bcp14">MUST</span> raise an error if any of the slice expression parameters
 does not fit in
 the implementation's representation of an integer.
 If a successfully parsed slice expression is evaluated against an array whose
 size doesn't
 fit in the implementation's representation of an integer, the implementation
-MUST raise an error.<a href="#section-3.5.6.2.2-14" class="pilcrow">¶</a></p>
+<span class="bcp14">MUST</span> raise an error.<a href="#section-3.5.6.2.2-14" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2767,10 +2970,6 @@ true  = %x74.72.75.65      ; true
 <dt id="E4X">[E4X]</dt>
         <dd>
 <span class="refAuthor">ISO</span>, <span class="refTitle">"Information technology — ECMAScript for XML (E4X) specification"</span>, <span class="seriesInfo">ISO/IEC 22537:2006 </span>, <time datetime="2006" class="refDate">2006</time>. </dd>
-<dd class="break"></dd>
-<dt id="E4X-overview">[E4X-overview]</dt>
-        <dd>
-<span class="refAuthor">Adobe Systems Inc., The Mozilla Foundation, Opera Software ASA, and others</span>, <span class="refTitle">"Proposed ECMAScript 4 Edition — Language Overview"</span>, <time datetime="2007" class="refDate">2007</time>. </dd>
 <dd class="break"></dd>
 <dt id="ECMA-262">[ECMA-262]</dt>
         <dd>
