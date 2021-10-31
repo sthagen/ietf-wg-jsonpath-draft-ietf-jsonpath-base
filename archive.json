@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-26T01:02:01.211777+00:00",
+  "timestamp": "2021-10-31T01:05:35.538779+00:00",
   "repo": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
   "labels": [
     {
@@ -20157,6 +20157,88 @@
           "body": "Let's merge this so we have a better base for discussion.",
           "createdAt": "2021-10-25T16:44:35Z",
           "updatedAt": "2021-10-25T16:44:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 128,
+      "id": "PR_kwDOEIqrgc4t2NIc",
+      "title": "Tim's comments on note and intro",
+      "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/128",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-10-29T12:12:22Z",
+      "updatedAt": "2021-10-30T07:45:10Z",
+      "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "baseRefName": "main",
+      "baseRefOid": "7a7decc3aeb2a5e4e9e9b9da64838a89a76af286",
+      "headRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "headRefName": "tim-note-intro",
+      "headRefOid": "4ea50c7b2210c589433396e60ce13150661c6d59",
+      "closedAt": "2021-10-30T07:45:09Z",
+      "mergedAt": "2021-10-30T07:45:09Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "316cf6ec4c1ba819753d549844098b71392d3b4d"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEIqrgc4vTIT-",
+          "commit": {
+            "abbreviatedOid": "4ea50c7"
+          },
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-30T06:45:06Z",
+          "updatedAt": "2021-10-30T06:45:07Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "Not sure what this means. Is the intention to merge this PR or leave it open as a way of capturing the discussion at the IETF 112 meeting?",
+              "createdAt": "2021-10-30T06:45:06Z",
+              "updatedAt": "2021-10-30T06:45:07Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vTIbX",
+          "commit": {
+            "abbreviatedOid": "4ea50c7"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-10-30T06:55:01Z",
+          "updatedAt": "2021-10-30T06:55:01Z",
+          "comments": [
+            {
+              "originalPosition": 26,
+              "body": "If you want to see the effect of this:\r\n\r\nhttps://ietf-wg-jsonpath.github.io/draft-ietf-jsonpath-base/tim-note-intro/draft-ietf-jsonpath-base.html\r\n\r\nThese are meant to be merged quickly, so we can have a version submitted on Nov 7 that addresses all of Tim's comments.  If there is anything controversial, we can discuss that at the IETF, but I'm sure we don't want to play the \"delay merging until doomsday\" game any longer.",
+              "createdAt": "2021-10-30T06:55:01Z",
+              "updatedAt": "2021-10-30T06:55:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vTImS",
+          "commit": {
+            "abbreviatedOid": "4ea50c7"
+          },
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-10-30T07:06:14Z",
+          "updatedAt": "2021-10-30T07:06:14Z",
           "comments": []
         }
       ]
