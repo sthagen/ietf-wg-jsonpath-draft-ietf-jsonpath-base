@@ -1359,31 +1359,49 @@ Root Node:  </dt>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-5.19">
-Nodelist:  </dt>
+Children (of a node):  </dt>
           <dd style="margin-left: 1.5em" id="section-1.1-5.20">
-            <p id="section-1.1-5.20.1">A list of nodes.  
-The output of applying a query to an argument is manifested as a list of nodes.
-While this list can be represented in JSON, e.g. as an array, the
-nodelist is an abstract concept unrelated to JSON values.<a href="#section-1.1-5.20.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-5.20.1">If the node is an array, each of its elements,
+or if the node is an object, each its member values (but not its
+member names).<a href="#section-1.1-5.20.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-5.21">
-Normalized Path:  </dt>
+Descendants (of a node):  </dt>
           <dd style="margin-left: 1.5em" id="section-1.1-5.22">
-            <p id="section-1.1-5.22.1">A simple form of JSONPath expression that identifies a node by
-providing a query that results in exactly that node.  Similar
-to, but syntactically different from, a JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span>.<a href="#section-1.1-5.22.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-5.22.1">The node itself, plus the descendants of each of its children. <span class="cref" id="or-self">Note that this is often more selectively called descendant-or-self.
+Should we define descendants non-inclusive of the node itself?
+We do have the language to say "node + descendants" in several places.</span><a href="#section-1.1-5.22.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
-<p id="section-1.1-6">For the purposes of this specification, a value as defined by
+<span class="break"></span><dl class="dlParallel" id="section-1.1-6">
+          <dt id="section-1.1-6.1">
+Nodelist:  </dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-6.2">
+            <p id="section-1.1-6.2.1">A list of nodes.  
+The output of applying a query to an argument is manifested as a list of nodes.
+While this list can be represented in JSON, e.g. as an array, the
+nodelist is an abstract concept unrelated to JSON values.<a href="#section-1.1-6.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.1-6.3">
+Normalized Path:  </dt>
+          <dd style="margin-left: 1.5em" id="section-1.1-6.4">
+            <p id="section-1.1-6.4.1">A simple form of JSONPath expression that identifies a node by
+providing a query that results in exactly that node.  Similar
+to, but syntactically different from, a JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span>.<a href="#section-1.1-6.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-1.1-7">For the purposes of this specification, a value as defined by
 <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span> is also viewed as a tree of nodes.
 Each node, in turn, holds a value.
 Further nodes within each value are the elements of arrays and the
 member values of objects and are themselves values.
 (The type of the value held by a node
-may also be referred to as the type of the node.)<a href="#section-1.1-6" class="pilcrow">¶</a></p>
-<p id="section-1.1-7">A query is applied to an argument, and the output is a nodelist.<a href="#section-1.1-7" class="pilcrow">¶</a></p>
+may also be referred to as the type of the node.)<a href="#section-1.1-7" class="pilcrow">¶</a></p>
+<p id="section-1.1-8">A query is applied to an argument, and the output is a nodelist.<a href="#section-1.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="history">
@@ -2398,8 +2416,7 @@ descendant-selector = ".." ( dot-member-name      /  ; ..&lt;name&gt;
             <h5 id="name-semantics-8">
 <a href="#name-semantics-8" class="section-name selfRef">Semantics</a>
             </h5>
-<p id="section-3.5.7.2-1">The <code>descendant-selector</code> is inspired by ECMAScript for XML (E4X).
-It selects the node and all its descendants.<a href="#section-3.5.7.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.7.2-1">The <code>descendant-selector</code> selects the node and all its descendants.<a href="#section-3.5.7.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
