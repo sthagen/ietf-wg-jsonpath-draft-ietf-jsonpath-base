@@ -83,11 +83,7 @@ Table of Contents
        3.5.6.  Array Slice Selector
        3.5.7.  Descendant Selector
        3.5.8.  Union Selector
-         3.5.8.1.  Syntax
-         3.5.8.2.  Semantics
        3.5.9.  Filter Selector
-         3.5.9.1.  Syntax
-         3.5.9.2.  Semantics
    4.  Expression Language
    5.  IANA Considerations
    6.  Security Considerations
@@ -911,7 +907,7 @@ Semantics
 
 3.5.8.  Union Selector
 
-3.5.8.1.  Syntax
+Syntax
 
    The union selector is syntactically related to the index-selector.
    It contains multiple, comma separated entries.
@@ -933,7 +929,7 @@ Semantics
       help with minimizing the number of places where S needs to be
       inserted.
 
-3.5.8.2.  Semantics
+Semantics
 
    A union selects any node which is selected by at least one of the
    union selectors and selects the concatenation of the lists (in the
@@ -943,7 +939,7 @@ Semantics
 
 3.5.9.  Filter Selector
 
-3.5.9.1.  Syntax
+Syntax
 
    The filter selector has the form [?<expr>].  It works via iterating
    over structured values, i.e. arrays and objects.
@@ -1052,7 +1048,7 @@ Semantics
                         Table 5: Filter expression
                            operator precedence
 
-3.5.9.2.  Semantics
+Semantics
 
    The filter-selector works with arrays and objects exclusively.  Its
    result might be a list of _zero_, _one_, _multiple_ or _all_ of their
