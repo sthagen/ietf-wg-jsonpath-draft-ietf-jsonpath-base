@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-10-31T01:05:35.538779+00:00",
+  "timestamp": "2021-11-02T01:05:20.957054+00:00",
   "repo": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
   "labels": [
     {
@@ -20242,6 +20242,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 129,
+      "id": "PR_kwDOEIqrgc4t8mqu",
+      "title": "Move XPath comparison to appendix, replace by short history.",
+      "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/129",
+      "state": "OPEN",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-01T20:31:47Z",
+      "updatedAt": "2021-11-01T21:52:41Z",
+      "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "baseRefName": "main",
+      "baseRefOid": "316cf6ec4c1ba819753d549844098b71392d3b4d",
+      "headRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "headRefName": "xpath-inspired",
+      "headRefOid": "b34dc8e5c6fca12529010133072638b2f54cc523",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
