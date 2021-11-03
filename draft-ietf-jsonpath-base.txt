@@ -5,10 +5,10 @@
 JSONPath WG                                              S. Gössner, Ed.
 Internet-Draft                                   Fachhochschule Dortmund
 Intended status: Standards Track                      G. Normington, Ed.
-Expires: 6 May 2022                                                     
+Expires: 7 May 2022                                                     
                                                          C. Bormann, Ed.
                                                   Universität Bremen TZI
-                                                         2 November 2021
+                                                         3 November 2021
 
 
                   JSONPath: Query expressions for JSON
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 May 2022.
+   This Internet-Draft will expire on 7 May 2022.
 
 Copyright Notice
 
@@ -291,7 +291,7 @@ Table of Contents
     | ()               | expression, e.g., for indexing               |
     +------------------+----------------------------------------------+
 
-            Table 1: Overview over JSONPath, comparing to XPath
+                      Table 1: Overview over JSONPath
 
 2.  JSONPath Examples
 
