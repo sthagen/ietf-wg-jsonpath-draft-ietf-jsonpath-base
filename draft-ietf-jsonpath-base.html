@@ -1620,7 +1620,9 @@ typical XML example representing a bookstore (that also has bicycles).<a href="#
 <p id="section-2-3">The examples in <a href="#tbl-example" class="xref">Table 2</a> use the expression mechanism to obtain
 the number of elements in an array, to test for the presence of a
 member in a object, and to perform numeric comparisons of member values with a
-constant.<a href="#section-2-3" class="pilcrow">¶</a></p>
+constant.
+For further illustration, the table shows XPath expressions that would
+be used with a comparable XML document; see also <a href="#xpath-overview" class="xref">Appendix A.1</a>.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <span id="name-example-jsonpath-expression"></span><div id="tbl-example">
 <table class="center" id="table-2">
         <caption>
@@ -1808,14 +1810,14 @@ stands for a nodelist that contains the root node of the argument,
 followed by a possibly empty sequence of <em>selectors</em>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
 <div id="section-3.3-2">
 <pre class="lang-abnf sourcecode">
-json-path = root-selector *(dot-selector        /
-                            dot-wild-selector   /
-                            index-selector      /
-                            index-wild-selector /
-                            union-selector      /
-                            slice-selector      /
-                            descendant-selector /
-                            filter-selector)
+json-path = root-selector *(S (dot-selector        /
+                               dot-wild-selector   /
+                               index-selector      /
+                               index-wild-selector /
+                               union-selector      /
+                               slice-selector      /
+                               descendant-selector /
+                               filter-selector))
 </pre><a href="#section-3.3-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.3-3">The syntax and semantics of each selector is defined below.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
@@ -1852,7 +1854,9 @@ node of any
 member value of the input
 node corresponding to the member name <code>"a"</code>.
 The result is again a list of one node: <code>[{"b":0},{"b":1},{"c":2}]</code>.<a href="#section-3.4-8" class="pilcrow">¶</a></p>
-<p id="section-3.4-9">Next, <code>[*]</code> selects from any input node -- either an array or an object -- all its elements or members.
+<p id="section-3.4-9">Next, <code>[*]</code> selects from an input node of type array all its elements
+(if the input note were of type object, it would select all its member
+values, but not the member names).
 The result is a list of three nodes: <code>{"b":0}</code>, <code>{"b":1}</code>, and <code>{"c":2}</code>.<a href="#section-3.4-9" class="pilcrow">¶</a></p>
 <p id="section-3.4-10">Finally, <code>.b</code> selects from any input node of type object with a member name
 <code>b</code> and selects the node of the member value of the input node corresponding to that name.
@@ -2013,7 +2017,7 @@ string, or true/false/null) selects no node.<a href="#section-3.5.3.2-1" class="
 <p id="section-3.5.4.1-1">An index selector <code>[&lt;index&gt;]</code> addresses at most one object member value or at most one array element value.<a href="#section-3.5.4.1-1" class="pilcrow">¶</a></p>
 <div id="section-3.5.4.1-2">
 <pre class="lang-abnf sourcecode">
-index-selector      = "[" (quoted-member-name / element-index) "]"
+index-selector      = "[" S (quoted-member-name / element-index) S "]"
 </pre><a href="#section-3.5.4.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.5.4.1-3">Applying the <code>index-selector</code> to an object value, a <code>quoted-member-name</code> string is required. JSONPath allows it to be enclosed in <em>single</em> or <em>double</em> quotes.<a href="#section-3.5.4.1-3" class="pilcrow">¶</a></p>
@@ -2212,16 +2216,19 @@ It selects elements starting at index <code>&lt;start&gt;</code>, ending at -- b
 not including -- <code>&lt;end&gt;</code>, while incrementing by <code>step</code>.<a href="#section-3.5.6.1-1" class="pilcrow">¶</a></p>
 <div id="section-3.5.6.1-2">
 <pre class="lang-abnf sourcecode">
-slice-selector = "[" S [start S] ":" [ S end] [S ":" S [step]] S "]"
+slice-selector = "[" S [start S] ":" S [end S] [":" S [step S]] "]"
 
 start          = int       ; included in selection
 end            = int       ; not included in selection
 step           = int       ; default: 1
 
-S              = *( %x20 / ; Space
+B              =    %x20 / ; Space
                     %x09 / ; Horizontal tab
                     %x0A / ; Line feed or New line
-                    %x0D ) ; Carriage return
+                    %x0D   ; Carriage return
+S              = *B        ; optional blank space
+RS             = 1*B       ; required blank space
+
 </pre><a href="#section-3.5.6.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.5.6.1-3">The <code>slice-selector</code> consists of three optional decimal integers separated by colons.<a href="#section-3.5.6.1-3" class="pilcrow">¶</a></p>
@@ -2478,7 +2485,7 @@ as many times in the node list.<a href="#section-3.5.8.2-1" class="pilcrow">¶</
 <p id="section-3.5.9.1-1">The filter selector has the form <code>[?&lt;expr&gt;]</code>. It works via iterating over structured values, i.e. arrays and objects.<a href="#section-3.5.9.1-1" class="pilcrow">¶</a></p>
 <div id="section-3.5.9.1-2">
 <pre class="lang-abnf sourcecode">
-filter-selector    = "[?" S boolean-expr S "]"
+filter-selector    = "[" S "?" S boolean-expr S "]"
 </pre><a href="#section-3.5.9.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-3.5.9.1-3">During iteration process each array element or object member is visited and its value -- accessible via symbol <code>@</code> -- or one of its descendants -- uniquely defined by a relative path -- is tested against a boolean expression <code>boolean-expr</code>.<a href="#section-3.5.9.1-3" class="pilcrow">¶</a></p>
@@ -2493,12 +2500,12 @@ logical-and-expr = basic-expr *(S "&amp;&amp;" S basic-expr)  ; conjunction
                                                       ; binds more tightly than disjunction
 
 basic-expr   = exist-expr /
-               [neg-op] paren-expr /
+               paren-expr /
                relation-expr
-exist-expr   = [neg-op] path                          ; path existence or non-existence
+exist-expr   = [neg-op S] path                          ; path existence or non-existence
 path         = rel-path / json-path
-rel-path     = "@" *(dot-selector / index-selector)
-paren-expr   = "(" S boolean-expr S ")"               ; parenthesized expression
+rel-path     = "@" *(S (dot-selector / index-selector))
+paren-expr   = [neg-op S] "(" S boolean-expr S ")"    ; parenthesized expression
 neg-op       = "!"                                    ; not operator
 
 relation-expr = comp-expr /                           ; comparison test
@@ -2517,11 +2524,11 @@ regex-expr   = (path / string-literal) S regex-op S regex
 regex-op     = "=~"                                   ; regular expression match
 regex        = &lt;TO BE DEFINED&gt;
 
-contain-expr = containable S in-op S container
+contain-expr = containable in-op container
 containable  = path /                                 ; path to primitive value
                number /
                string-literal
-in-op        = " in "                                 ; in operator
+in-op        = RS "in" RS                             ; in operator
 container    = path /                                 ; resolves to array
                array-literal
 </pre><a href="#section-3.5.9.1-5" class="pilcrow">¶</a>
