@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-11-02T01:05:20.957054+00:00",
+  "timestamp": "2021-11-04T01:03:06.088515+00:00",
   "repo": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
   "labels": [
     {
@@ -5551,7 +5551,7 @@
       "labels": [],
       "body": "While this may be a bit premature as long as we don't know what the rhs of contain-expr should be, it is missing its lhs.\r\n\r\n```\r\ncontain-expr = in-op container\r\nin-op        = \" in \"                                 ; in operator\r\n```\r\n\r\n*What* is in the container?",
       "createdAt": "2021-09-16T16:20:13Z",
-      "updatedAt": "2021-09-17T10:06:20Z",
+      "updatedAt": "2021-11-02T12:42:17Z",
       "closedAt": null,
       "comments": [
         {
@@ -5574,6 +5574,13 @@
           "body": "(From 2012-09-17 interim:)\r\nSo we would have syntax for array literals composed of primitive values only (subset of JSON array literals); other JSON array literals cause a syntax error.  (Empty array literals should be allowed to simplify code generation.)\r\nA LHS evaluating to a complex value would not match.\r\nThe path on the RHS may also yield an array, we would match against every single element of that like we would match against a literal array.\r\nExample: `\"color\" in @.colors`\r\n\r\ntending towards consensus on:\r\n`@.color in $.colors`\r\nif $.colors is an array of structured values, @.color is a single structured value?\r\n\u2794 only match primitive values from the LHS (counterintuitive!?)\r\n`@.color` = [128, 255, 17] \u2794 no selection \r\neven if `$.color` = [[128, 255, 17], [1, 2, 3]]\r\n(we cannot avoid structured data to turn up in a query, but we don't match)\r\nAvoid deep equals!  (We already avoid it in simple comparisons.)\r\n",
           "createdAt": "2021-09-17T10:03:24Z",
           "updatedAt": "2021-09-17T10:06:20Z"
+        },
+        {
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Reminder: lhs of `regex-op` ...\r\n\r\nFrom\r\n```\r\nregex-expr   =   regex-op regex\r\n```\r\nto\r\n```\r\nregex-expr   = rel-path / json-path /                 ; path to string value\r\n                      string-literal\r\n                      regex-op regex\r\n```\r\nas a proposal.\r\n",
+          "createdAt": "2021-11-02T12:42:17Z",
+          "updatedAt": "2021-11-02T12:42:17Z"
         }
       ]
     },
@@ -5759,9 +5766,31 @@
       "labels": [],
       "body": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/125#discussion_r721614374",
       "createdAt": "2021-10-25T16:19:37Z",
-      "updatedAt": "2021-10-25T16:19:37Z",
+      "updatedAt": "2021-11-03T09:02:04Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "After thinking a while about comparing structured types, I now see no problem to support equality of  them. I agree to handling them is straightforward:\r\n\r\n> Two structured types are equal, if they are equal on a per-node basis. \r\n\r\nalso see [The Abstract Equality Comparison Algorithm](https://262.ecma-international.org/5.1/#sec-11.9.3) ... not exactly, what we want though.\r\n\r\nWe need to be clear about order ... !\r\n```\r\n[1,2] == [1,2]\r\n{x:1,y:2} == {x:1,y:2}\r\n[1,2] == [2,1]  // ?\r\n{x:1,y:2} == {y:2,x:1} // ?\r\n[] == []\r\n{} == {}\r\n```\r\nContainables may be defined on exactly that comparison rule. \r\n\r\nI believe, we need to add objects here again.  Also we need to discuss subsets.\r\n\r\n### Array Examples:\r\n```\r\n1 in [1,2,3]             // primitive value lhs\r\n[1,2] in [1,2,3]         // structured value lhs\r\n[1,2] in [1,2,3,[1,2]] // subset\r\n[] in [1,2,3]             // empty array\r\n[] in [1,2,3,[]]          // empty array\r\n{} in [1,2,3,{}]          // empty object\r\n{x:1,y:2} in [{x:1,y:2}]\r\n```\r\n### Object Examples:\r\n```\r\n'x' in {x:1,y:2}\r\n['x','y'] in {x:1,y:2}\r\n{x:1} in {x:1,y:2}\r\n{z:3,x:1} in {x:1,y:2,z:3}\r\n{} in  {x:1,y:2}\r\n```\r\n\r\nOnce having agreement about handling that edge cases (maybe there are more), we might add it to the spec. \r\n\r\nBtw.: JavaScript resolves all comparisons above to `false`, since objects are equal only, if they are referencing the same object (no deep equals).",
+          "createdAt": "2021-11-02T11:48:02Z",
+          "updatedAt": "2021-11-02T11:48:02Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Comments inline.\n\nOn Tue, 2 Nov 2021 at 11:48, Stefan Goessner ***@***.***>\nwrote:\n\n> After thinking a while about comparing structured types, I now see no\n> problem to support equality of them. I agree to handling them is\n> straightforward:\n>\n> Two structured types are equal, if they are equal on a per-node basis.\n>\n> also see The Abstract Equality Comparison Algorithm\n> <https://262.ecma-international.org/5.1/#sec-11.9.3> ... not exactly,\n> what we want though.\n>\n> We need to be clear about order ... !\n>\n> [1,2] == [1,2]\n> {x:1,y:2} == {x:1,y:2}\n> [1,2] == [2,1]  // ?\n>\n> No. Arrays are ordered and equality tests should respect that ordering.\n\n>\n> {x:1,y:2} == {y:2,x:1} // ?\n>\n> Yes. Objects are unordered and equality tests should respect that lack of\nordering.\n\n>\n> [] == []\n> {} == {}\n>\n> Containables may be defined on exactly that comparison rule.\n>\n> I believe, we need to add objects here again. Also we need to discuss\n> subsets.\n> Array Examples:\n>\n> 1 in [1,2,3]             // primitive value lhs\n> [1,2] in [1,2,3]         // structured value lhs\n>\n> No. Conflating membership and subset violates the principle of least\nsurprise and so is likely to cause confusion. Also I am not aware of any\nprecedent for such conflation in mathematics or programming language\nsemantics.\n\n>\n> [1,2] in [1,2,3,[1,2]] // subset\n>\n> This doesn't add any value beyond the previous case. Better to discuss:\n\n[1,2] in [[1,2]] // structured value membership\n\nAlso, we need to discuss ordering of arrays. For example:\n\n[1,2] in [[2,1]]\n\nshould be false, if we agree that [1,2] != [2,1].\n\n>\n> [] in [1,2,3]             // empty array\n> [] in [1,2,3,[]]          // empty array\n> {} in [1,2,3,{}]          // empty object\n> {x:1,y:2} in [{x:1,y:2}]\n>\n> Object Examples:\n\nI don't think we should conflate membership and subset. Since \"in\" has a\nstronger connotation of membership than subset, I don't think we can easily\ndefine \"in\" with an object on the right hand side. Note also that there\nisn't yet a notation for a mathematical \"maplet\", but if we represented it\nas a pair, e.g. ('x',1), then we could test membership of objects thus:\n\n('x',1) in {x:1}\n\n(However, I don't think this is worth the cost of increased complexity of\nthe spec.)\n\n> 'x' in {x:1,y:2}\n> ['x','y'] in {x:1,y:2}\n> {x:1} in {x:1,y:2}\n> {z:3,x:1} in {x:1,y:2,z:3}\n> {} in  {x:1,y:2}\n>\n> Once having agreement about handling that edge cases (maybe there are\n> more), we might add it to the spec.\n>\n> Btw.: JavaScript resolves all comparisons above to false, since objects\n> are equal only, if they are referencing the same object (no deep equals).\n>\n> \u2014\n> You are receiving this because you are subscribed to this thread.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/issues/127#issuecomment-957364968>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAAXF2J2TDFR5P3LGOZ4QH3UJ7FX3ANCNFSM5GVV2MMA>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n>\n",
+          "createdAt": "2021-11-03T08:27:57Z",
+          "updatedAt": "2021-11-03T08:27:57Z"
+        },
+        {
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I totally support a decision to:\r\n* not dealing with subsets\r\n* restrict the rhs to arrays only\r\n\r\nwith contain-expr's.\r\n",
+          "createdAt": "2021-11-03T09:02:04Z",
+          "updatedAt": "2021-11-03T09:02:04Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -20248,26 +20277,165 @@
       "id": "PR_kwDOEIqrgc4t8mqu",
       "title": "Move XPath comparison to appendix, replace by short history.",
       "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/129",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cabo",
       "authorAssociation": "MEMBER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2021-11-01T20:31:47Z",
-      "updatedAt": "2021-11-01T21:52:41Z",
+      "updatedAt": "2021-11-02T08:49:15Z",
       "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
       "baseRefName": "main",
       "baseRefOid": "316cf6ec4c1ba819753d549844098b71392d3b4d",
       "headRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
       "headRefName": "xpath-inspired",
       "headRefOid": "b34dc8e5c6fca12529010133072638b2f54cc523",
+      "closedAt": "2021-11-02T08:18:21Z",
+      "mergedAt": "2021-11-02T08:18:21Z",
+      "mergedBy": "glyn",
+      "mergeCommit": {
+        "oid": "f66ce6f385670b65b4e06c85fb1f9b72f114ae31"
+      },
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Thanks for merging.  I had a small fix to the caption of table 1 which is now #130.",
+          "createdAt": "2021-11-02T08:46:30Z",
+          "updatedAt": "2021-11-02T08:49:15Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEIqrgc4vYmLs",
+          "commit": {
+            "abbreviatedOid": "b34dc8e"
+          },
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Great improvement!",
+          "createdAt": "2021-11-02T07:58:58Z",
+          "updatedAt": "2021-11-02T07:58:58Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vYoEi",
+          "commit": {
+            "abbreviatedOid": "b34dc8e"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Additions / Replacements of high value ... thanks",
+          "createdAt": "2021-11-02T08:07:54Z",
+          "updatedAt": "2021-11-02T08:07:54Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 130,
+      "id": "PR_kwDOEIqrgc4t98E2",
+      "title": "Fix title of table 1",
+      "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/130",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2021-11-02T08:48:24Z",
+      "updatedAt": "2021-11-03T02:20:20Z",
+      "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "baseRefName": "main",
+      "baseRefOid": "f66ce6f385670b65b4e06c85fb1f9b72f114ae31",
+      "headRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "headRefName": "xpath-inspired",
+      "headRefOid": "cec05a1ad0a31b993f9c013fe6653813477412a5",
+      "closedAt": "2021-11-03T02:20:15Z",
+      "mergedAt": "2021-11-03T02:20:15Z",
+      "mergedBy": "glyn",
+      "mergeCommit": {
+        "oid": "504575560da180f3624d88147405fea58e53f533"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEIqrgc4vYzJH",
+          "commit": {
+            "abbreviatedOid": "cec05a1"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-11-02T08:54:19Z",
+          "updatedAt": "2021-11-02T08:54:19Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vctwN",
+          "commit": {
+            "abbreviatedOid": "cec05a1"
+          },
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-11-03T02:20:02Z",
+          "updatedAt": "2021-11-03T02:20:02Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 131,
+      "id": "PR_kwDOEIqrgc4uCIqH",
+      "title": "blank space added",
+      "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/131",
+      "state": "OPEN",
+      "author": "goessner",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "... and some minor edits ...",
+      "createdAt": "2021-11-03T12:27:45Z",
+      "updatedAt": "2021-11-03T12:51:19Z",
+      "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "baseRefName": "main",
+      "baseRefOid": "504575560da180f3624d88147405fea58e53f533",
+      "headRepository": "goessner/draft-ietf-jsonpath-base",
+      "headRefName": "main",
+      "headRefOid": "9da13ab4005aac6864ecbd8f1c38f5ff26a7aaa2",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOEIqrgc4veXTi",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-03T12:48:26Z",
+          "updatedAt": "2021-11-03T12:48:26Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "definition of `exist-expr` might be not necessary with \r\n\r\n```\r\nbasic-expr   = [neg-op] path /        ; path existence or non-existence\r\n               [neg-op] paren-expr / \r\n               relation-expr\r\n```",
+              "createdAt": "2021-11-03T12:48:26Z",
+              "updatedAt": "2021-11-03T12:51:19Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
