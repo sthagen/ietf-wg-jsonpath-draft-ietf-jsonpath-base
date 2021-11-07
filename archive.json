@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-11-04T01:03:06.088515+00:00",
+  "timestamp": "2021-11-07T01:05:28.121568+00:00",
   "repo": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
   "labels": [
     {
@@ -20395,25 +20395,42 @@
       "id": "PR_kwDOEIqrgc4uCIqH",
       "title": "blank space added",
       "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/131",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "goessner",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "... and some minor edits ...",
       "createdAt": "2021-11-03T12:27:45Z",
-      "updatedAt": "2021-11-03T12:51:19Z",
+      "updatedAt": "2021-11-04T14:35:08Z",
       "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
       "baseRefName": "main",
       "baseRefOid": "504575560da180f3624d88147405fea58e53f533",
       "headRepository": "goessner/draft-ietf-jsonpath-base",
       "headRefName": "main",
       "headRefOid": "9da13ab4005aac6864ecbd8f1c38f5ff26a7aaa2",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
-      "comments": [],
+      "closedAt": "2021-11-04T10:09:46Z",
+      "mergedAt": "2021-11-04T10:09:46Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "22582930209e0b745dc606681f44c683dfc37d7c"
+      },
+      "comments": [
+        {
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "body": "Indeed.  I'll do a small PR with my points.",
+          "createdAt": "2021-11-04T10:10:02Z",
+          "updatedAt": "2021-11-04T10:10:02Z"
+        },
+        {
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "body": "a little late to the party ... thanks",
+          "createdAt": "2021-11-04T14:35:08Z",
+          "updatedAt": "2021-11-04T14:35:08Z"
+        }
+      ],
       "reviews": [
         {
           "id": "PRR_kwDOEIqrgc4veXTi",
@@ -20434,6 +20451,341 @@
               "updatedAt": "2021-11-03T12:51:19Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vh-aP",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T08:03:37Z",
+          "updatedAt": "2021-11-04T08:03:37Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "I agree `exist-expr` isn't formally necessary, but it gives us a place to highlight the purpose of the syntax and to give it a meaningful name.",
+              "createdAt": "2021-11-04T08:03:37Z",
+              "updatedAt": "2021-11-04T08:03:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4viJad",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T08:57:10Z",
+          "updatedAt": "2021-11-04T08:57:11Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "You can't select members, only member values.\r\n",
+              "createdAt": "2021-11-04T08:57:10Z",
+              "updatedAt": "2021-11-04T08:57:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4viJbg",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T08:57:15Z",
+          "updatedAt": "2021-11-04T08:57:16Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "So no space between `[` and `?`?",
+              "createdAt": "2021-11-04T08:57:15Z",
+              "updatedAt": "2021-11-04T08:57:16Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4viJwK",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T08:58:44Z",
+          "updatedAt": "2021-11-04T08:58:44Z",
+          "comments": [
+            {
+              "originalPosition": 70,
+              "body": "Style comment: I have tried to indicate ABNF operator precedence using parentheses.  Maybe not needed here because of the grouping into lines.",
+              "createdAt": "2021-11-04T08:58:44Z",
+              "updatedAt": "2021-11-04T08:58:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4viP5a",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This PR could be merged to make progress. Further changes as indicated by @cabo are probably needed, either now or in a subsequent PR.",
+          "createdAt": "2021-11-04T09:24:51Z",
+          "updatedAt": "2021-11-04T09:24:51Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjapY",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:26:19Z",
+          "updatedAt": "2021-11-04T14:26:19Z",
+          "comments": [
+            {
+              "originalPosition": 73,
+              "body": "that was what I was thinking ... agreed, so let it in.",
+              "createdAt": "2021-11-04T14:26:19Z",
+              "updatedAt": "2021-11-04T14:26:19Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjcPa",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:31:00Z",
+          "updatedAt": "2021-11-04T14:31:01Z",
+          "comments": [
+            {
+              "originalPosition": 17,
+              "body": "I overlooked, that Glyn's original text was correct, as he was referring to that specific example. So possibly better\r\n```\r\nNext, `[*]` selects from any input node \u2014 an array here \u2014 all its elements.\r\n``` \r\n@cabo is right regarding members though.",
+              "createdAt": "2021-11-04T14:31:00Z",
+              "updatedAt": "2021-11-04T14:31:01Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjc9J",
+          "commit": {
+            "abbreviatedOid": "9da13ab"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:33:03Z",
+          "updatedAt": "2021-11-04T14:33:03Z",
+          "comments": [
+            {
+              "originalPosition": 53,
+              "body": "no ... might be an extension to the standard making no harm.",
+              "createdAt": "2021-11-04T14:33:03Z",
+              "updatedAt": "2021-11-04T14:33:04Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 132,
+      "id": "PR_kwDOEIqrgc4uFo2n",
+      "title": "Various nits on #129, #131",
+      "url": "https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/132",
+      "state": "MERGED",
+      "author": "cabo",
+      "authorAssociation": "MEMBER",
+      "assignees": [],
+      "labels": [],
+      "body": "Lots of niggly details re blank space.\r\nStyle consistency, some missing places (assuming we stick with the liberal approach).\r\nAllowing \"in\" before or after a newline or tab.\r\nAdding some legend to the only remaining table with XPath content in the main document.\r\n",
+      "createdAt": "2021-11-04T11:20:25Z",
+      "updatedAt": "2021-11-04T16:13:41Z",
+      "baseRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "baseRefName": "main",
+      "baseRefOid": "22582930209e0b745dc606681f44c683dfc37d7c",
+      "headRepository": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
+      "headRefName": "nits-131-129",
+      "headRefOid": "026effbebea38fb652daf9171aae993a263dbe18",
+      "closedAt": "2021-11-04T16:13:41Z",
+      "mergedAt": "2021-11-04T16:13:41Z",
+      "mergedBy": "cabo",
+      "mergeCommit": {
+        "oid": "e3d7d08d9a2bbaac26c711d79ead1f3373582b42"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOEIqrgc4vjgC_",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:42:08Z",
+          "updatedAt": "2021-11-04T14:42:08Z",
+          "comments": [
+            {
+              "originalPosition": 114,
+              "body": "yes, I was stumbeling over that also ...",
+              "createdAt": "2021-11-04T14:42:08Z",
+              "updatedAt": "2021-11-04T14:42:08Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjh6Q",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:47:39Z",
+          "updatedAt": "2021-11-04T14:47:40Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "Do we really want to allow jsonpathes  scattered across several lines\r\n\r\n```\r\n$   .   a\r\n[ 'b' ] \r\n[ 123 ] \r\n\r\nHas there been users demand for this ?",
+              "createdAt": "2021-11-04T14:47:39Z",
+              "updatedAt": "2021-11-04T14:47:40Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjigc",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:49:23Z",
+          "updatedAt": "2021-11-04T14:49:24Z",
+          "comments": [
+            {
+              "originalPosition": 57,
+              "body": "definitely better now ...",
+              "createdAt": "2021-11-04T14:49:23Z",
+              "updatedAt": "2021-11-04T14:49:24Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjitW",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:49:58Z",
+          "updatedAt": "2021-11-04T14:49:58Z",
+          "comments": [
+            {
+              "originalPosition": 71,
+              "body": "yes ... needed once for now ...",
+              "createdAt": "2021-11-04T14:49:58Z",
+              "updatedAt": "2021-11-04T14:50:11Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vji-x",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "cabo",
+          "authorAssociation": "MEMBER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:50:46Z",
+          "updatedAt": "2021-11-04T14:50:46Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "You mean, allowing newlines in JSONPath?  Depends a bit on how long they are.  I seem to remember we wanted to be lenient here...\r\n",
+              "createdAt": "2021-11-04T14:50:46Z",
+              "updatedAt": "2021-11-04T14:50:46Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjjMy",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:51:24Z",
+          "updatedAt": "2021-11-04T14:51:25Z",
+          "comments": [
+            {
+              "originalPosition": 80,
+              "body": "hmm ... consistent with blank philosophy above though",
+              "createdAt": "2021-11-04T14:51:25Z",
+              "updatedAt": "2021-11-04T14:51:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vjlvb",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2021-11-04T14:58:36Z",
+          "updatedAt": "2021-11-04T14:58:36Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "yes i can remember darkly too ... so your edits all in all make sense.",
+              "createdAt": "2021-11-04T14:58:36Z",
+              "updatedAt": "2021-11-04T14:58:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOEIqrgc4vj7ZR",
+          "commit": {
+            "abbreviatedOid": "026effb"
+          },
+          "author": "goessner",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2021-11-04T16:03:19Z",
+          "updatedAt": "2021-11-04T16:03:19Z",
+          "comments": []
         }
       ]
     }
