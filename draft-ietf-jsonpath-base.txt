@@ -5,10 +5,10 @@
 JSONPath WG                                              S. Gössner, Ed.
 Internet-Draft                                   Fachhochschule Dortmund
 Intended status: Standards Track                      G. Normington, Ed.
-Expires: 8 May 2022                                                     
+Expires: 14 May 2022                                                    
                                                          C. Bormann, Ed.
                                                   Universität Bremen TZI
-                                                         4 November 2021
+                                                        10 November 2021
 
 
                   JSONPath: Query expressions for JSON
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 8 May 2022.
+   This Internet-Draft will expire on 14 May 2022.
 
 Copyright Notice
 
@@ -917,6 +917,12 @@ Syntax
 Semantics
 
    The descendant-selector selects the node and all its descendants.
+
+   In the resultant nodelist: * nodes occur before their children, and *
+   nodes of an array occur in array order.
+
+   Children of an object may occur in any order, since JSON objects are
+   unordered.
 
 3.5.8.  Union Selector
 
