@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2021-11-11T01:04:19.714600+00:00",
+  "timestamp": "2021-11-14T01:05:38.008011+00:00",
   "repo": "ietf-wg-jsonpath/draft-ietf-jsonpath-base",
   "labels": [
     {
@@ -164,7 +164,7 @@
       ],
       "body": "[A number of implementations support implicit root selector](https://cburgmer.github.io/json-path-comparison/results/dot_notation_without_root.html) (e.g. `key` instead of `$.key`).\r\n\r\n## Proposal\r\n**The standard should support optional root selector.**\r\n\r\nIt should be supported since it is widely accepted and also a handy shortform (which I expect to be frequently used).\r\n\r\nAs an example, we should take into account that this behavior is supported by JavaScript jsonpath and jsonpath-plus that counts for a total of ~800000 weekly downloads and ~900 dependents on npm. Furthermore this is supported by Goessner implementation too.\r\n\r\nFor the sake of simplicity a path starting with `$` should be defined as \"canonical form\" / \"normal form\" on the specification.\r\n\r\nTherefore, the following:\r\n\r\n> \"Syntactically, a JSONPath consists of a root selector (`$`), which selects the root node of a JSON document, followed by a possibly empty sequence of matchers.\"\r\n\r\nmight be rephrased as:\r\n\r\n> \"Syntactically, a canonical JSONPath consists of a root selector (`$`), which selects the root node of a JSON document, followed by a possibly empty sequence of matchers.\"\r\n\r\nAs a consequence of this feature (for consistency reasons) `[\"key\"]` and `[0]` should be supported as well.\r\n\r\nWe also should take a decision about `.key`, which is supported by few popular implementations.",
       "createdAt": "2020-07-15T11:12:39Z",
-      "updatedAt": "2021-11-09T21:18:34Z",
+      "updatedAt": "2021-11-11T04:58:56Z",
       "closedAt": "2021-11-09T21:18:34Z",
       "comments": [
         {
@@ -243,6 +243,13 @@
           "body": "Closed in #115 ",
           "createdAt": "2021-11-09T21:18:34Z",
           "updatedAt": "2021-11-09T21:18:34Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What was the resolution?  Did we decide to require `$` at the start of a path (and either `$` or `@` for expression paths)?",
+          "createdAt": "2021-11-11T04:58:56Z",
+          "updatedAt": "2021-11-11T04:58:56Z"
         }
       ]
     },
@@ -260,7 +267,7 @@
       ],
       "body": "A valid identifier rule (for \"dot child\" and recursive descent) should be discussed.\r\n\r\n* All implementations agree on `[a-zA-Z_][a-zA-Z0-9_]*`\r\n* Most implementations allow a dash in the middle of a identifier (e.g. `key-dash`)\r\n* Consensus on `$.-key` and `$.key-` has not been investigated\r\n* Most implementations allow unicode identifiers such as `$.\u5c6c\u6027`\r\n* Consensus on digits as first identifier character has not been investigated\r\n\r\n## Proposal\r\n* Identifier regexp must be simple. e.g. some implementations allow any unicode codepoint except `\\s`, `\\t`, `$`, `.`, `*`, etc... This approach allows writing regexp similar to `[^'\".*()$?,>=<\\-\\:\\@\\[\\]\\s\\t\\n\\r]*`. If this approach is confirmed a list of disallowed codepoints should be identified.\r\n* `-` should not be allowed as first identifier character\r\n* `[0-9]` as first identifier character should be investigated and discussed.",
       "createdAt": "2020-07-15T14:23:02Z",
-      "updatedAt": "2021-11-09T21:16:41Z",
+      "updatedAt": "2021-11-11T04:58:03Z",
       "closedAt": "2021-11-09T21:16:41Z",
       "comments": [
         {
@@ -304,6 +311,13 @@
           "body": "Closed in #102 ",
           "createdAt": "2021-11-09T21:16:41Z",
           "updatedAt": "2021-11-09T21:16:41Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What was the resolution?  Do we allow hyphens?  Was a PR needed to change anything?",
+          "createdAt": "2021-11-11T04:58:02Z",
+          "updatedAt": "2021-11-11T04:58:02Z"
         }
       ]
     },
@@ -1022,7 +1036,7 @@
       ],
       "body": "Each selector may each return multiple nodes, or even the same node multiple times.  This raises the question of whether (and if so, how) the resulting collection of nodes needs to be distinct, i.e. without duplicates.\r\n\r\nAn example:\r\n\r\n```\r\nJSON instance:\r\n{\r\n  \"a\": [\r\n    \"string\",\r\n    null,\r\n    true\r\n  ],\r\n  \"b\": [\r\n    false,\r\n    \"string\",\r\n    5.4\r\n  ]\r\n}\r\n\r\nPath:\r\n$.*[0,1]\r\n```\r\n\r\nThe raw result set of this selector is `[\"string\", null, false, \"string\"]`.  If we say that we expect only the distinct set of nodes, then the results would be `[\"string\", null, false]`, removing the duplicate `\"string\"`.\r\n\r\nSo the question up for discussion is, \"Should selectors return distinct sets of nodes or are duplicates preferred?\"\r\n\r\n---\r\n\r\nI had been considering a location-based distinction (based on the location of the value in the original JSON structure) as a possibility, but I don't think it makes much sense given the definition of a selector in Section 2.5, taking multiple nodes and outputing multiple nodes.  A selector knows nothing about the original JSON structure that is being evaluated.\r\n\r\nHowever for posterity, consider the following (rather contrived) path evaluated against the above instance:\r\n\r\n```\r\n$.*[0,:5]\r\n```\r\n\r\nIn this case, the `\"string\"` value which is the first element of the `a` property would be selected twice, and the `\"string\"` value in the second element of the `b` property would be selected once, resulting in three `\"string\"` values in the results.  For location-based distinction, only the value from `a` would be considered duplicate, leaving two instances of `\"string\"` in the result set.\r\n\r\nAgain, I *don't* think that this is a viable approach due to how a selector works and the information it's given.  However, if we were to also require [location as part of the output](https://github.com/cburgmer/json-path-comparison/issues/29), then this *would* be a viable solution.",
       "createdAt": "2020-09-25T05:59:57Z",
-      "updatedAt": "2021-11-10T10:57:52Z",
+      "updatedAt": "2021-11-11T05:15:22Z",
       "closedAt": null,
       "comments": [
         {
@@ -1164,6 +1178,13 @@
           "body": "Maybe we can record the resolution that there is no removal, neither of duplicate values nor of duplicate nodes.",
           "createdAt": "2021-11-10T10:57:52Z",
           "updatedAt": "2021-11-10T10:57:52Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> Maybe we can record the resolution that there is no removal\r\n\r\nI'd be interested in how this resolution came about because it seems like the discussion here was leaning the other way: removing duplicates to some degree.  To _what_ degree was still under discussion.",
+          "createdAt": "2021-11-11T05:15:21Z",
+          "updatedAt": "2021-11-11T05:15:21Z"
         }
       ]
     },
@@ -1179,7 +1200,7 @@
       "labels": [],
       "body": "Do we allow spaces (outside of string literals)?  If so, where is whitespace allowed?\r\n\r\nI think whitespace in query expressions should be allowed.  This would fall in to the context of the [query expression syntax](https://github.com/jsonpath-standard/internet-draft/issues/17).\r\n\r\n```\r\n$[(@length - 1)]\r\n$[?(@.value < 10)]\r\n```\r\n\r\nMaybe inside the union/[indexer](https://github.com/jsonpath-standard/internet-draft/issues/21) selector:\r\n\r\n```\r\n$[ 1, 2, 5:7, \"prop\" ]\r\n```\r\n\r\nAre there any other places where whitespace could be considered useful?",
       "createdAt": "2020-09-25T06:45:16Z",
-      "updatedAt": "2021-11-09T21:09:39Z",
+      "updatedAt": "2021-11-11T04:56:36Z",
       "closedAt": "2021-11-09T21:09:38Z",
       "comments": [
         {
@@ -1202,6 +1223,13 @@
           "body": "Closed in #131 and #132",
           "createdAt": "2021-11-09T21:09:38Z",
           "updatedAt": "2021-11-09T21:09:38Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "What was the resolution here?  Where did we end up allowing whitespace?",
+          "createdAt": "2021-11-11T04:56:36Z",
+          "updatedAt": "2021-11-11T04:56:36Z"
         }
       ]
     },
@@ -4677,7 +4705,7 @@
       ],
       "body": "A gentleman by the username of gregsdennis on Stack Overflow suggested I raise this issue here for consideration into the specification:\r\n\r\nhttps://stackoverflow.com/questions/67477431/json-path-is-there-a-way-to-only-return-a-specific-number-of-filtered-elements/67477600\r\n\r\nGiven an object like this:\r\n\r\n`    { \"store\": {\r\n    \"book\": [ \r\n      { \"category\": \"reference\",\r\n        \"author\": \"Nigel Rees\",\r\n        \"title\": \"Sayings of the Century\",\r\n        \"price\": 8.95\r\n      },\r\n      { \"category\": \"fiction\",\r\n        \"author\": \"Evelyn Waugh\",\r\n        \"title\": \"Sword of Honour\",\r\n        \"price\": 12.99\r\n      },\r\n      { \"category\": \"fiction\",\r\n        \"author\": \"Herman Melville\",\r\n        \"title\": \"Moby Dick\",\r\n        \"isbn\": \"0-553-21311-3\",\r\n        \"price\": 8.99\r\n      },\r\n      { \"category\": \"fiction\",\r\n        \"author\": \"J. R. R. Tolkien\",\r\n        \"title\": \"The Lord of the Rings\",\r\n        \"isbn\": \"0-395-19395-8\",\r\n        \"price\": 22.99\r\n      }\r\n    ],\r\n    \"bicycle\": {\r\n      \"color\": \"red\",\r\n      \"price\": 19.95\r\n    }\r\n  }\r\n}`\r\n\r\nand running a JSON path expression like so:\r\n\r\n`$..book[?(@.price<10)]`\r\n\r\nWill return 2 objects:\r\n\r\n`[\r\n   {\r\n      \"category\" : \"reference\",\r\n      \"author\" : \"Nigel Rees\",\r\n      \"title\" : \"Sayings of the Century\",\r\n      \"price\" : 8.95\r\n   },\r\n   {\r\n      \"category\" : \"fiction\",\r\n      \"author\" : \"Herman Melville\",\r\n      \"title\" : \"Moby Dick\",\r\n      \"isbn\" : \"0-553-21311-3\",\r\n      \"price\" : 8.99\r\n   }\r\n]`\r\n\r\nit would be great if JSON Path also provide syntax for returning the first or last 'n' items of the filtered array\r\n\r\ne.g. if I only wanted maximum 1 item from the result of the filtering operation:\r\n\r\n`$..book[?(@.price<10)]{1}`\r\n\r\n",
       "createdAt": "2021-05-11T21:23:25Z",
-      "updatedAt": "2021-11-10T03:19:03Z",
+      "updatedAt": "2021-11-11T05:00:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -4700,6 +4728,13 @@
           "body": "I agree such a feature has _some_ value, but I'm not convinced it has _enough_ value to warrant adding complexity to the spec.",
           "createdAt": "2021-11-10T03:19:03Z",
           "updatedAt": "2021-11-10T03:19:03Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fair enough.  I think this should remain open and perhaps labeled as a `v2`/`future` feature.",
+          "createdAt": "2021-11-11T05:00:28Z",
+          "updatedAt": "2021-11-11T05:00:28Z"
         }
       ]
     },
@@ -4715,7 +4750,7 @@
       "labels": [],
       "body": "How much do we want to reference XPath within the spec?  I understand that XPath is the inspiration (and in the tagline that @goessner used in his blog post: \"XPath for JSON\"), but I wonder if much of this can be left out of the spec.\r\n\r\nThe argument for this is that we're defining JSONPath.  It shouldn't assume any understanding of XPath or any other technology.  It's not the job of the specification to convince readers to use it.  It's the job of the specification to _define_ the technology.\r\n\r\nI'm perfectly happy moving this into an external \"Understanding JSONPath\" website at some point.",
       "createdAt": "2021-05-12T08:53:07Z",
-      "updatedAt": "2021-11-10T05:15:47Z",
+      "updatedAt": "2021-11-11T05:01:43Z",
       "closedAt": "2021-11-10T05:15:47Z",
       "comments": [
         {
@@ -4731,6 +4766,13 @@
           "body": "Closed by #131, #132",
           "createdAt": "2021-11-10T05:15:47Z",
           "updatedAt": "2021-11-10T05:15:47Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The XPath inclusion was moved into an appendix.",
+          "createdAt": "2021-11-11T05:01:43Z",
+          "updatedAt": "2021-11-11T05:01:43Z"
         }
       ]
     },
@@ -4750,7 +4792,7 @@
       ],
       "body": "At today's meeting, I agreed to submit a PR to float the idea of partial determinism for the descendants operator, even though the consensus seems to be against any determinism for that operator. Given the descendants operator PR https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/102 isn't yet merged, I'll start with an issue to capture discussion and avoid rebasing effort.\r\n\r\nWe probably don't want to _force_ any determinism on implementations, so the idea is to provide a recommendation for implementations which want to provide partial determinism and use \"SHOULD\" language so the recommendation is optional. Then implementations which opt in will agree on the ordering recommentations.\r\n\r\nThe benefits of partial determinism are:\r\n* improved predictability and interoperation\r\n* relative ease for JSONPath users writing tests, as there are fewer possible outputs.\r\n\r\nIn PR https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/pull/102 there are no constraints on the non-determinism of the descendants operator:\r\n> The `descendant-selector` is inspired by ECMAScript for XML (E4X). It selects the node and all its descendants.\r\n\r\nWe agreed in issue https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/issues/60 to allow non-determinism in the order in which objects are iterated and the same should be true when the descendants operator encounters an object. But there are other details of the ordering which could be tied down:\r\n* arrays SHOULD be visited in array order\r\n* nodes SHOULD be visited strictly before their descendants (so-called _pre-order_ traversal).\r\n\r\n(_Post-order_ traversal, in which nodes are visited strictly after their descendants, would be an equally valid alternative.)\r\n\r\nOne of the reasons given at today's meeting for allowing full non-determinism was for parallel processing, so it would be interesting to discuss what constraints the above rules produce on parallel processing. The order of collection of the results seems to be more significant than whether or not parallel processing is used.",
       "createdAt": "2021-06-15T15:13:00Z",
-      "updatedAt": "2021-11-10T10:45:13Z",
+      "updatedAt": "2021-11-11T08:35:17Z",
       "closedAt": "2021-11-10T10:45:13Z",
       "comments": [
         {
@@ -4850,6 +4892,27 @@
           "body": "Yes, I think we agree that array order should be preserved and that object order is not guaranteed, but I'd like this issue to focus specifically on the ordering of `..`.",
           "createdAt": "2021-09-09T18:44:10Z",
           "updatedAt": "2021-09-09T18:44:10Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Added text indicating node-first / children-second ordering.",
+          "createdAt": "2021-11-11T05:03:22Z",
+          "updatedAt": "2021-11-11T05:03:22Z"
+        },
+        {
+          "author": "glyn",
+          "authorAssociation": "COLLABORATOR",
+          "body": "... and preserving array order.\n\nOn Thu, 11 Nov 2021, 05:03 Greg Dennis, ***@***.***> wrote:\n\n> Added text indicating node-first / children-second ordering.\n>\n> \u2014\n> You are receiving this because you modified the open/close state.\n> Reply to this email directly, view it on GitHub\n> <https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base/issues/103#issuecomment-965992017>,\n> or unsubscribe\n> <https://github.com/notifications/unsubscribe-auth/AAAXF2K7BWKGFWQAZT3KVP3ULNFCLANCNFSM46XPPL6Q>\n> .\n> Triage notifications on the go with GitHub Mobile for iOS\n> <https://apps.apple.com/app/apple-store/id1477376905?ct=notification-email&mt=8&pt=524675>\n> or Android\n> <https://play.google.com/store/apps/details?id=com.github.android&referrer=utm_campaign%3Dnotification-email%26utm_medium%3Demail%26utm_source%3Dgithub>.\n>\n>\n",
+          "createdAt": "2021-11-11T07:44:31Z",
+          "updatedAt": "2021-11-11T07:44:31Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sure. That too.  But I don't think that was ever in question.",
+          "createdAt": "2021-11-11T08:35:17Z",
+          "updatedAt": "2021-11-11T08:35:17Z"
         }
       ]
     },
@@ -5764,7 +5827,7 @@
       "labels": [],
       "body": "(Spin-off from #120:)\r\n\r\nDiscuss:\r\n`@.color in $..allowed_color`\r\nWe make sure that the paths on the LHS only yield a single node; the paths on the RHS may yield multiple nodes and the nodelist is examined like a JSON array would be.\r\n\\[How do we distinguish these cases?]\r\n\u2794 disallow paths that can yield multiple nodes on the in-op RHS as well.",
       "createdAt": "2021-09-17T10:04:11Z",
-      "updatedAt": "2021-11-10T11:07:37Z",
+      "updatedAt": "2021-11-11T05:18:44Z",
       "closedAt": null,
       "comments": [
         {
@@ -5780,6 +5843,13 @@
           "body": "I'd rather say that the nodelist is a nodelist, and an array is a (JSON) array.  So \"in\" could have different semantics, e.g., by returning the disjunction of matching the values of the nodes.",
           "createdAt": "2021-11-10T11:07:37Z",
           "updatedAt": "2021-11-10T11:07:37Z"
+        },
+        {
+          "author": "gregsdennis",
+          "authorAssociation": "COLLABORATOR",
+          "body": "> So \"in\" could have different semantics\r\n\r\nIn what scenarios would you want to treat a nodelist different than an array?\r\n\r\nI tend to agree with the opening comment.",
+          "createdAt": "2021-11-11T05:18:44Z",
+          "updatedAt": "2021-11-11T05:18:44Z"
         }
       ]
     },
