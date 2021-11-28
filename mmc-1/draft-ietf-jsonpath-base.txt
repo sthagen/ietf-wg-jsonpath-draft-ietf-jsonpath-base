@@ -5,10 +5,10 @@
 JSONPath WG                                              S. Gössner, Ed.
 Internet-Draft                                   Fachhochschule Dortmund
 Intended status: Standards Track                      G. Normington, Ed.
-Expires: 2 May 2022                                                     
+Expires: 1 June 2022                                                    
                                                          C. Bormann, Ed.
                                                   Universität Bremen TZI
-                                                         29 October 2021
+                                                        28 November 2021
 
 
                   JSONPath: Query expressions for JSON
@@ -16,20 +16,19 @@ Expires: 2 May 2022
 
 Abstract
 
-   JSONPath defines a string syntax for identifying values within a
-   JavaScript Object Notation (JSON, RFC 8259) value.
+   JSONPath defines a string syntax for selecting and extracting values
+   within a JavaScript Object Notation (JSON, RFC 8259) value.
 
 Discussion Venues
 
    This note is to be removed before publishing as an RFC.
 
    Discussion of this document takes place on the JSON Path Working
-   Group mailing list (jsonpath@ietf.org), which is archived at
-   https://mailarchive.ietf.org/arch/browse/jsonpath/
-   (https://mailarchive.ietf.org/arch/browse/jsonpath/).  Source for
-   this draft and an issue tracker can be found at https://github.com/
-   ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath (https://github.com/
-   ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath).
+   Group mailing list (mailto:jsonpath@ietf.org), which is archived at
+   https://mailarchive.ietf.org/arch/browse/jsonpath/.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base.
 
 Status of This Memo
 
@@ -46,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 2 May 2022.
+   This Internet-Draft will expire on 1 June 2022.
 
 Copyright Notice
 
@@ -58,15 +57,15 @@ Copyright Notice
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
-   extracted from this document must include Simplified BSD License text
-   as described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Simplified BSD License.
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 Table of Contents
 
    1.  Introduction
      1.1.  Terminology
-     1.2.  Inspired by XPath
+     1.2.  History
      1.3.  Overview of JSONPath Expressions
    2.  JSONPath Examples
    3.  JSONPath Syntax and Semantics
@@ -83,17 +82,15 @@ Table of Contents
        3.5.6.  Array Slice Selector
        3.5.7.  Descendant Selector
        3.5.8.  Union Selector
-         3.5.8.1.  Syntax
-         3.5.8.2.  Semantics
        3.5.9.  Filter Selector
-         3.5.9.1.  Syntax
-         3.5.9.2.  Semantics
    4.  Expression Language
    5.  IANA Considerations
    6.  Security Considerations
    7.  References
      7.1.  Normative References
      7.2.  Informative References
+   Appendix A.  Inspired by XPath
+     A.1.  JSONPath and XPath
    Acknowledgements
    Contributors
    Authors' Addresses
@@ -108,8 +105,8 @@ Table of Contents
    companion, to JSON Pointer [RFC6901].
    // Insert reference to section where the relationship is detailed.
    // The purposes of the two syntaxes are different.  Pointer is for
-   // isolating a single location within a document.  Path is a query
-   // syntax that can also be used to pull multiple locations.
+   // isolating a single location within a JSON document.  Path is a
+   // query syntax that can also be used to pull multiple locations.
 
 1.1.  Terminology
 
@@ -135,9 +132,10 @@ Table of Contents
    Additional terms used in this specification are defined below.
 
    Value:  As per [RFC8259], a structure complying to the generic data
-      model of JSON, i.e., composed of components such as containers,
-      namely JSON objects and arrays, and atomic data, namely null,
-      true, false, numbers, and text strings.
+      model of JSON, i.e., composed of components such as structured
+      values, namely JSON objects and arrays, and primitive data, namely
+      numbers and text strings as well as the special values null, true,
+      and false.
 
    Member:  A name/value pair in an object.  (Not itself a value.)
 
@@ -150,7 +148,10 @@ Table of Contents
       XML context for XML elements.)
 
    Index:  A non-negative integer that identifies a specific element in
-      an array.
+      an array.  Note that the term _indexing_ is also used for
+      accessing elements using negative integers (Section "Semantics"),
+      and for accessing member values in an object using their member
+      name.
 
    Query:  Short name for JSONPath expression.
 
@@ -161,6 +162,17 @@ Table of Contents
       argument.
 
    Root Node:  The unique node whose value is the entire argument.
+
+   Children (of a node):  If the node is an array, each of its elements,
+      or if the node is an object, each its member values (but not its
+      member names).
+
+   Descendants (of a node):  The node itself, plus the descendants of
+      each of its children.
+      // Note that this is often more selectively called descendant-or-
+      // self.  Should we define descendants non-inclusive of the node
+      // itself?  We do have the language to say "node + descendants" in
+      // several places.
 
    Nodelist:  A list of nodes.  The output of applying a query to an
       argument is manifested as a list of nodes.  While this list can be
@@ -181,57 +193,36 @@ Table of Contents
 
    A query is applied to an argument, and the output is a nodelist.
 
-1.2.  Inspired by XPath
+1.2.  History
 
-   A frequently emphasized advantage of XML is the availability of
-   powerful tools to analyse, transform and selectively extract data
-   from XML documents.  [XPath] is one of these tools.
+   This document picks up Stefan Goessner's popular JSONPath proposal
+   dated 2007-02-21 [JSONPath-orig] and provides a normative definition
+   for it.
 
-   In 2007, the need for something solving the same class of problems
-   for the emerging JSON community became apparent, specifically for:
+   Appendix A provides a brief synopsis with XML's XPath [XPath], which
+   was the inspiration that led to the definition of JSONPath.
 
-   *  Finding data interactively and extracting them out of [RFC8259]
-      JSON values without special scripting.
+   JSONPath was intended as a light-weight companion to JSON
+   implementations on platforms such as PHP and JavaScript, so instead
+   of defining its own expression language like XPath did, JSONPath
+   delegated this to the expression language of the platform.  While the
+   languages in which JSONPath is used do have significant
+   commonalities, over time this caused non-portability of JSONPath
+   expressions between the ensuing platform-specific dialects.
 
-   *  Specifying the relevant parts of the JSON data in a request by a
-      client, so the server can reduce the amount of data in its
-      response, minimizing bandwidth usage.
-
-   So what does such a tool look like for JSON?  When defining a
-   JSONPath, how should expressions look?
-
-   The XPath expression
-
-   /store/book[1]/title
-
-   looks like
-
-   x.store.book[0].title
-
-   or
-
-   x['store']['book'][0]['title']
-
-   in popular programming languages such as JavaScript, Python and PHP,
-   with a variable x holding the argument.  Here we observe that such
-   languages already have a fundamentally XPath-like feature built in.
-
-   The JSONPath tool in question should:
-
-   *  be naturally based on those language characteristics.
-
-   *  cover only essential parts of XPath 1.0.
-
-   *  be lightweight in code size and memory consumption.
-
-   *  be runtime efficient.
+   The present specification intends to remove platform dependencies and
+   server as a common JSONPath specification that can be used across
+   platforms.  Obviously, this means that backwards compatibility could
+   not always be achieved; a design principle of this specification is
+   to go with a "consensus" between implementations even if it is rough,
+   as long as that does not jeopardize the objective of obtaining a
+   usable, stable JSON query language.
 
 1.3.  Overview of JSONPath Expressions
 
-   JSONPath expressions always apply to a value in the same way as XPath
-   expressions are used in combination with an XML document.  Since a
-   value is anonymous, JSONPath uses the abstract name $ to refer to the
-   root node of the argument.
+   JSONPath expressions are applied to a JSON value, the _argument_.
+   Within the JSONPath expression, the abstract name $ is used to refer
+   to the _root node_ of the argument, i.e., to the argument as a whole.
 
    JSONPath expressions can use the _dot notation_
 
@@ -241,91 +232,69 @@ Table of Contents
 
    $['store']['book'][0]['title']
 
-   for paths input to a JSONPath processor. [1] Where a JSONPath
-   processor uses JSONPath expressions as output paths, these will
-   always be converted to Output Paths which employ the more general
-   _bracket notation_. [2] Bracket notation is more general than dot
-   notation and can serve as a canonical form when a JSONPath processor
-   uses JSONPath expressions as output paths.
+   to build paths that are input to a JSONPath processor.  Bracket
+   notation is more general than dot notation and can serve as a
+   canonical form (for instance, when a JSONPath processor uses JSONPath
+   expressions as output paths).
 
-   JSONPath allows the wildcard symbol * for member names and array
-   indices.  It borrows the descendant operator .. from [E4X] and the
-   array slice syntax proposal [start:end:step] [SLICE] from ECMASCRIPT
-   4.
+   JSONPath allows the wildcard symbol * to select any member of an
+   object or any element of an array (Section 3.5.3).  The descendant
+   operator .. selects the node and all its descendants (Section 3.5.7).
+   The array slice syntax [start:end:step] allows selecting a regular
+   selection of an element from an array, giving a start position, an
+   end position, and possibly a step value that moves the position from
+   the start to the end (Section 3.5.6).
 
-   JSONPath was originally designed to employ an _underlying scripting
-   language_ for computing expressions.  The present specification
-   defines a simple expression language that is independent from any
-   scripting language in use on the platform.
-
-   JSONPath can use expressions, written in parentheses: (<expr>), as an
-   alternative to explicit names or indices as in:
+   JSONPath employs an _expression language_ for computing values and
+   making decisions.  The present specification defines a simple
+   expression language that is independent from any scripting language
+   in use on the platform.  JSONPath can use such expression language
+   expressions, written in parentheses: (<expr>), as an alternative to
+   explicit names or indices as in
+   // We probably want to use an expression that does not use .length.
 
    $.store.book[(@.length-1)].title
 
-   The symbol @ is used for the current node.  Filter expressions are
-   supported via the syntax ?(<boolean expr>) as in
+   The symbol @ is used for the current node, i.e., the node in the
+   context of which the expression is evaluated.
+
+   Filter expressions are supported via the syntax ?(<boolean expr>) as
+   in
 
    $.store.book[?(@.price < 10)].title
 
-   Here is a complete overview and a side by side comparison of the
-   JSONPath syntax elements with their XPath counterparts.
+   Table 1 provides a quick overview of the JSONPath syntax elements.
 
-    +=======+==================+=====================================+
-    | XPath | JSONPath         | Description                         |
-    +=======+==================+=====================================+
-    | /     | $                | the root element/node               |
-    +-------+------------------+-------------------------------------+
-    | .     | @                | the current element/node            |
-    +-------+------------------+-------------------------------------+
-    | /     | . or []          | child operator                      |
-    +-------+------------------+-------------------------------------+
-    | ..    | n/a              | parent operator                     |
-    +-------+------------------+-------------------------------------+
-    | //    | ..               | nested descendants (JSONPath        |
-    |       |                  | borrows this syntax from E4X)       |
-    +-------+------------------+-------------------------------------+
-    | *     | *                | wildcard: All elements/nodes        |
-    |       |                  | regardless of their names           |
-    +-------+------------------+-------------------------------------+
-    | @     | n/a              | attribute access: JSON values do    |
-    |       |                  | not have attributes                 |
-    +-------+------------------+-------------------------------------+
-    | []    | []               | subscript operator: XPath uses it   |
-    |       |                  | to iterate over element collections |
-    |       |                  | and for predicates; native array    |
-    |       |                  | indexing as in JavaScript here      |
-    +-------+------------------+-------------------------------------+
-    | |     | [,]              | Union operator in XPath (results in |
-    |       |                  | a combination of node sets);        |
-    |       |                  | JSONPath allows alternate names or  |
-    |       |                  | array indices as a set              |
-    +-------+------------------+-------------------------------------+
-    | n/a   | [start:end:step] | array slice operator borrowed from  |
-    |       |                  | ES4                                 |
-    +-------+------------------+-------------------------------------+
-    | []    | ?()              | applies a filter (script)           |
-    |       |                  | expression                          |
-    +-------+------------------+-------------------------------------+
-    | n/a   | ()               | expression engine                   |
-    +-------+------------------+-------------------------------------+
-    | ()    | n/a              | grouping in Xpath                   |
-    +-------+------------------+-------------------------------------+
+    +==================+==============================================+
+    | JSONPath         | Description                                  |
+    +==================+==============================================+
+    | $                | the root node                                |
+    +------------------+----------------------------------------------+
+    | @                | the current node                             |
+    +------------------+----------------------------------------------+
+    | . or []          | child operator                               |
+    +------------------+----------------------------------------------+
+    | n/a              | parent operator                              |
+    +------------------+----------------------------------------------+
+    | ..               | nested descendants                           |
+    +------------------+----------------------------------------------+
+    | *                | wildcard: all member values/array elements   |
+    |                  | regardless of their names/indices            |
+    +------------------+----------------------------------------------+
+    | []               | subscript operator: index current node as an |
+    |                  | array (from 0)                               |
+    +------------------+----------------------------------------------+
+    | [,]              | Union operator JSONPath allows alternate(??) |
+    |                  | names or array indices as a set              |
+    +------------------+----------------------------------------------+
+    | [start:end:step] | array slice operator                         |
+    +------------------+----------------------------------------------+
+    | ?()              | applies a filter expression                  |
+    +------------------+----------------------------------------------+
+    | ()               | expression, e.g., for indexing               |
+    +------------------+----------------------------------------------+
 
-           Table 1: Overview over JSONPath, comparing to XPath
-
-   XPath has a lot more to offer (location paths in unabbreviated
-   syntax, operators and functions) than listed here.  Moreover there is
-   a significant difference how the subscript operator works in Xpath
-   and JSONPath:
-
-   *  Square brackets in XPath expressions always operate on the _node
-      set_ resulting from the previous path fragment.  Indices always
-      start at 1.
-
-   *  With JSONPath, square brackets operate on the _object_ or _array_
-      addressed by the previous path fragment.  Array indices always
-      start at 0.
+                      Table 1: Overview over JSONPath
 
 2.  JSONPath Examples
 
@@ -371,7 +340,9 @@ Table of Contents
    The examples in Table 2 use the expression mechanism to obtain the
    number of elements in an array, to test for the presence of a member
    in a object, and to perform numeric comparisons of member values with
-   a constant.
+   a constant.  For further illustration, the table shows XPath
+   expressions that would be used with a comparable XML document; see
+   also Appendix A.1.
 
    +======================+========================+===================+
    | XPath                | JSONPath               | Result            |
@@ -425,33 +396,48 @@ Table of Contents
 3.1.  Overview
 
    A JSONPath query is a string which selects zero or more nodes of a
-   piece of JSON.  A valid query conforms to the ABNF syntax defined by
-   this document.
+   piece of JSON.
 
-   A query MUST be encoded using UTF-8.  To parse a query according to
-   the grammar in this document, its UTF-8 form SHOULD first be decoded
-   into Unicode code points as described in [RFC3629].
+   A query MUST be encoded using UTF-8.  The grammar for queries given
+   in this document assumes that its UTF-8 form is first be decoded into
+   Unicode code points as described in [RFC3629]; implementation
+   approaches that lead to an equivalent result are possible.
 
    A string to be used as a JSONPath query needs to be _well-formed_ and
    _valid_. A string is a well-formed JSONPath query if it conforms to
-   the syntax of JSONPath.  A well-formed JSONPath query is valid if it
-   also fulfills all semantic requirements posed by this document.
+   the syntax of JSONPath, as defined by the ABNF syntax in this
+   document.  A well-formed JSONPath query is valid if it also fulfills
+   all semantic requirements posed by this document.
+
+   To be valid, integer numbers in the JSONPath query that are relevant
+   to the JSONPath processing (e.g., index values and steps) MUST be
+   within the range of exact values defined in I-JSON [RFC7493], namely
+   within the interval [-(2^53)+1, (2^53)-1]).
 
    The well-formedness and the validity of JSONPath queries are
-   independent of the value the query is applied to; no further errors
-   can be raised during application of the query to a value.
+   independent of the JSON value the query is applied to; no further
+   errors can be raised during application of the query to a value.
 
-   (Obviously, an implementation can still fail when executing a
-   JSONPath query, e.g., because of resource depletion, but this is not
-   modeled in the present specification.)
+   Obviously, an implementation can still fail when executing a JSONPath
+   query, e.g., because of resource depletion, but this is not modeled
+   in the present specification.  However, the implementation MUST NOT
+   silently malfunction.  Specifically, if a valid JSONPath query is
+   evaluated against a structured value whose size doesn't fit in the
+   range of exact values, interfering with the correct interpretation of
+   the query, the implementation MUST provide an indication of overflow.
+
+   (Readers familiar with the HTTP error model may be reminded of 400
+   type errors when pondering well-formedness and validity, while
+   resource depletion and related errors are comparable to 500 type
+   errors.)
 
 3.2.  Processing Model
 
    In this specification, the semantics of a JSONPath query are defined
    in terms of a _processing model_.  That model is not prescriptive of
    the internal workings of an implementation: Implementations may wish
-   (or need) to design a different process that yields results that
-   conform to the model.
+   (or need) to design a different process that yields results that are
+   consistent with this model.
 
    In the processing model, a valid query is executed against a value,
    the _argument_, and produces a list of zero or more nodes of the
@@ -488,14 +474,14 @@ Table of Contents
    which stands for a nodelist that contains the root node of the
    argument, followed by a possibly empty sequence of _selectors_.
 
-   json-path = root-selector *(dot-selector        /
-                               dot-wild-selector   /
-                               index-selector      /
-                               index-wild-selector /
-                               union-selector      /
-                               slice-selector      /
-                               descendant-selector /
-                               filter-selector)
+   json-path = root-selector *(S (dot-selector        /
+                                  dot-wild-selector   /
+                                  index-selector      /
+                                  index-wild-selector /
+                                  union-selector      /
+                                  slice-selector      /
+                                  descendant-selector /
+                                  filter-selector))
 
    The syntax and semantics of each selector is defined below.
 
@@ -532,9 +518,10 @@ Table of Contents
    member name "a".  The result is again a list of one node:
    [{"b":0},{"b":1},{"c":2}].
 
-   Next, [*] selects from any input node which is an array and selects
-   all the elements of the input node.  The result is a list of three
-   nodes: {"b":0}, {"b":1}, and {"c":2}.
+   Next, [*] selects from an input node of type array all its elements
+   (if the input note were of type object, it would select all its
+   member values, but not the member names).  The result is a list of
+   three nodes: {"b":0}, {"b":1}, and {"c":2}.
 
    Finally, .b selects from any input node of type object with a member
    name b and selects the node of the member value of the input node
@@ -553,19 +540,20 @@ Table of Contents
    A JSONPath query consists of a sequence of selectors.  Valid
    selectors are
 
-   *  Root selector $
+   *  Root selector $ (used at the start of a query and in expressions)
 
    *  Dot selector .<name>, used with object member names exclusively.
 
    *  Dot wild card selector .*.
 
-   *  Index selector [<index>], where <index> is either an (possibly
-      negative) array index or an object member name.
+   *  Index selector [<index>], where <index> is either a (possibly
+      negative, see Section "Semantics") array index or an object member
+      name.
 
    *  Index wild card selector [*].
 
-   *  Array slice selector [<start>:<end>:<step>], where <start>, <end>,
-      <step> are integer literals.
+   *  Array slice selector [<start>:<end>:<step>], where the optional
+      values <start>, <end>, and <step> are integer literals.
 
    *  Nested descendants selector ...
 
@@ -575,7 +563,7 @@ Table of Contents
 
    *  Filter selector [?(<expr>)]
 
-   *  Current item selector @
+   *  Current item selector @ (used in expressions)
 
 3.5.1.  Root Selector
 
@@ -609,15 +597,15 @@ Syntax
    ALPHA           =  %x41-5A / %x61-7A    ; A-Z / a-z
 
    Member names containing other characters than allowed by dot-selector
-   -- such as space ` ` and minus - characters -- MUST NOT be used with
-   the dot-selector.  (Such member names can be addressed by the index-
-   selector instead.)
+   -- such as space ` , minus-, or dot.characters -- MUST NOT be used
+   with thedot-selector.  (Such member names can be addressed by
+   theindex-selector` instead.)
 
 Semantics
 
    The dot-selector selects the node of the member value corresponding
-   to the member name from any JSON object.  It selects no nodes from
-   any other JSON value.
+   to the member name from any JSON object in its input nodelist.  It
+   selects no nodes from any other JSON value.
 
    Note that the dot-selector follows the philosophy of JSON strings and
    is allowed to contain bit sequences that cannot encode Unicode
@@ -629,16 +617,18 @@ Semantics
 
 Syntax
 
-   The dot wild card selector has the form .*.
+   The dot wild card selector has the form .* as defined in the
+   following syntax:
 
    dot-wild-selector    = "." "*"            ;  dot followed by asterisk
 
 Semantics
 
    A dot-wild-selector acts as a wild card by selecting the nodes of all
-   member values of an object as well as all element nodes of an array.
-   Applying the dot-wild-selector to a primitive JSON value (number,
-   string, or true/false/null) selects no node.
+   member values of an object in its input nodelist as well as all
+   element nodes of an array in its input nodelist.  Applying the dot-
+   wild-selector to a primitive JSON value (number, string, or
+   true/false/null) selects no node.
 
 3.5.4.  Index Selector
 
@@ -647,11 +637,12 @@ Syntax
    An index selector [<index>] addresses at most one object member value
    or at most one array element value.
 
-   index-selector      = "[" (quoted-member-name / element-index) "]"
+   index-selector      = "[" S (quoted-member-name / element-index) S "]"
 
-   Applying the index-selector to an object value, a quoted-member-name
-   string is required.  JSONPath allows it to be enclosed in _single_ or
-   _double_ quotes.
+   Applying the index-selector to an object value in its input nodelist,
+   a quoted-member-name string is required to select the corresponding
+   member value.  In contrast to JSON, the JSONPath syntax allows
+   strings to be enclosed in _single_ or _double_ quotes.
 
    quoted-member-name  = string-literal
 
@@ -697,18 +688,19 @@ Syntax
    ; Task from 2021-06-15 interim: update ABNF later
 
    Applying the index-selector to an array, a numerical element-index is
-   required.  JSONPath allows it to be negative.
+   required to select the corresponding element.  JSONPath allows it to
+   be negative (see Section "Semantics").
 
    element-index   = int                             ; decimal integer
 
    int             = ["-"] ( "0" / (DIGIT1 *DIGIT) ) ; -  optional
    DIGIT1          = %x31-39                         ; 1-9 non-zero digit
 
-   Notes: 1. double-quoted strings follow JSON in [RFC8259]; single-
-   quoted strings follow an analogous pattern. 2.  An element-index is
-   an integer (in base 10, as in JSON numbers). 3.  As in JSON numbers,
-   the syntax does not allow octal-like integers with leading zeros such
-   as 01 or -01.
+   Notes: 1. double-quoted strings follow the JSON string syntax
+   (Section 7 of [RFC8259]); single-quoted strings follow an analogous
+   pattern (Section "Syntax"). 2.  An element-index is an integer (in
+   base 10, as in JSON numbers). 3.  As in JSON numbers, the syntax does
+   not allow octal-like integers with leading zeros such as 01 or -01.
 
 Semantics
 
@@ -754,8 +746,10 @@ Semantics
    sufficiently long array.
 
    A negative element-index counts from the array end.  For example,
-   selector [-1] selects the last and selector [-2] selects the last but
-   one element of an array with at least two elements.
+   selector [-1] selects the last and selector [-2] selects the
+   penultimate element of an array with at least two elements.  As with
+   non-negative indexes, it is not an error if such an element does not
+   exist; this simply means that no element is selected.
 
 3.5.5.  Index Wild Card Selector
 
@@ -782,18 +776,18 @@ Syntax
    selects elements starting at index <start>, ending at -- but not
    including -- <end>, while incrementing by step.
 
-   slice-selector = "[" slice-index "]"
-
-   slice-index    = ws [start] ws ":" ws [end] [ws ":" ws [step] ws]
+   slice-selector = "[" S [start S] ":" S [end S] [":" S [step S]] "]"
 
    start          = int       ; included in selection
    end            = int       ; not included in selection
    step           = int       ; default: 1
 
-   ws             = *( %x20 / ; Space
+   B              =    %x20 / ; Space
                        %x09 / ; Horizontal tab
                        %x0A / ; Line feed or New line
-                       %x0D ) ; Carriage return
+                       %x0D   ; Carriage return
+   S              = *B        ; optional blank space
+   RS             = 1*B       ; required blank space
 
    The slice-selector consists of three optional decimal integers
    separated by colons.
@@ -831,9 +825,9 @@ Informal Introduction
    order and [::-1] selects all the elements of an array in reverse
    order.
 
-   When step is 0, no elements are selected.  This is the one case which
-   differs from the behaviour of Python, which raises an error in this
-   case.
+   When step is 0, no elements are selected.  (This is the one case
+   which differs from the behaviour of Python, which raises an error in
+   this case.)
 
    The following section specifies the behaviour fully, without
    depending on JavaScript or Python behaviour.
@@ -925,11 +919,8 @@ Detailed Semantics
    When step = 0, no elements are selected and the result array is
    empty.
 
-   An implementation MUST raise an error if any of the slice expression
-   parameters does not fit in the implementation's representation of an
-   integer.  If a successfully parsed slice expression is evaluated
-   against an array whose size doesn't fit in the implementation's
-   representation of an integer, the implementation MUST raise an error.
+   To be valid, the slice expression parameters MUST be in the I-JSON
+   range of exact values, see Section 3.1.
 
 3.5.7.  Descendant Selector
 
@@ -947,34 +938,29 @@ Syntax
 
 Semantics
 
-   The descendant-selector is inspired by ECMAScript for XML (E4X).  It
-   selects the node and all its descendants.
+   The descendant-selector selects the node and all its descendants.
+
+   In the resultant nodelist: * nodes occur before their children, and *
+   nodes of an array occur in array order.
+
+   Children of an object may occur in any order, since JSON objects are
+   unordered.
 
 3.5.8.  Union Selector
 
-3.5.8.1.  Syntax
+Syntax
 
    The union selector is syntactically related to the index-selector.
-   It contains multiple, comma separated entries.
+   It contains two or more entries, separated by commas.
 
-   union-selector = "[" ws union-entry 1*(ws "," ws union-entry) ws "]"
+   union-selector = "[" S union-entry 1*(S "," S union-entry) S "]"
 
    union-entry    =  ( quoted-member-name /
                        element-index      /
                        slice-index
                      )
 
-      Task (T1): This, besides slice-index, is currently one of only two
-      places in the document that mentions whitespace.  Whitespace needs
-      to be handled throughout the ABNF syntax.  Room Consensus at the
-      2021-06-15 interim was that JSONPath generally is generous with
-      allowing insignificant whitespace throughout.  Minimizing the
-      impact of the many whitespace insertion points by choosing a rule
-      name such as "S" was mentioned.  Some conventions will probably
-      help with minimizing the number of places where S needs to be
-      inserted.
-
-3.5.8.2.  Semantics
+Semantics
 
    A union selects any node which is selected by at least one of the
    union selectors and selects the concatenation of the lists (in the
@@ -982,14 +968,18 @@ Semantics
    Note that any node selected in more than one of the union selectors
    is kept as many times in the node list.
 
+   To be valid, integer values in the element-index and slice-index
+   components MUST be in the I-JSON range of exact values, see
+   Section 3.1.
+
 3.5.9.  Filter Selector
 
-3.5.9.1.  Syntax
+Syntax
 
    The filter selector has the form [?<expr>].  It works via iterating
    over structured values, i.e. arrays and objects.
 
-   filter-selector    = "[?" boolean-expr "]"
+   filter-selector    = "[" S "?" S boolean-expr S "]"
 
    During iteration process each array element or object member is
    visited and its value -- accessible via symbol @ -- or one of its
@@ -999,24 +989,26 @@ Semantics
    The current item is selected if and only if the result is true.
 
    boolean-expr     = logical-or-expr
-   logical-or-expr  = logical-and-expr *("||" logical-and-expr)
+   logical-or-expr  = logical-and-expr *(S "||" S logical-and-expr)
                                                          ; disjunction
                                                          ; binds less tightly than conjunction
-   logical-and-expr = basic-expr *("&&" basic-expr)      ; conjunction
+   logical-and-expr = basic-expr *(S "&&" S basic-expr)  ; conjunction
                                                          ; binds more tightly than disjunction
 
-   basic-expr   = exist-expr / paren-expr / (neg-op paren-expr) / relation-expr
-   exist-expr   = [neg-op] path                          ; path existence or non-existence
+   basic-expr   = exist-expr /
+                  paren-expr /
+                  relation-expr
+   exist-expr   = [neg-op S] path                          ; path existence or non-existence
    path         = rel-path / json-path
-   rel-path     = "@" *(dot-selector / index-selector)
-   paren-expr   = "(" boolean-expr ")"                   ; parenthesized expression
+   rel-path     = "@" *(S (dot-selector / index-selector))
+   paren-expr   = [neg-op S] "(" S boolean-expr S ")"    ; parenthesized expression
    neg-op       = "!"                                    ; not operator
 
    relation-expr = comp-expr /                           ; comparison test
                    regex-expr /                          ; regular expression test
                    contain-expr                          ; containment test
 
-   comp-expr    = comparable comp-op comparable
+   comp-expr    = comparable S comp-op S comparable
    comparable   = number / string-literal /              ; primitive ...
                   true / false / null /                  ; values only
                   path                                   ; path value
@@ -1024,15 +1016,17 @@ Semantics
                   "<"  / ">"  /                          ; operators
                   "<=" / ">="
 
-   regex-expr   = regex-op regex
+   regex-expr   = (path / string-literal) S regex-op S regex
    regex-op     = "=~"                                   ; regular expression match
    regex        = <TO BE DEFINED>
 
    contain-expr = containable in-op container
-   containable  = rel-path / json-path /                 ; path to primitive value
-                  number / string-literal
-   in-op        = " in "                                 ; in operator
-   container    = rel-path / json-path / array-literal   ; resolves to array
+   containable  = path /                                 ; path to primitive value
+                  number /
+                  string-literal
+   in-op        = RS "in" RS                             ; in operator
+   container    = path /                                 ; resolves to array
+                  array-literal
 
    Notes:
 
@@ -1047,11 +1041,12 @@ Semantics
    *  Types are not implicitly converted in comparisons.  So "13 ==
       '13'" selects no node.
 
-   *  A member or element value by itself is _falsy_ only, if it does
-      not exist.  Otherwise it is _truthy_, resulting in its value.  To
-      be more specific explicit comparisons are necessary.  This
-      existence test -- as an exception of the general rule -- also
-      works with structured values.
+   *  A member or element value by itself in a Boolean context is
+      interpreted as false only if it does not exist.  Otherwise it is
+      interpreted as true.  To be more specific about the actual value,
+      explicit comparisons are necessary.  This existence test -- as an
+      exception to the general rule -- also works with structured
+      values.
 
    *  Regular expression tests can be applied to string values only.
 
@@ -1086,19 +1081,22 @@ Semantics
                   |     2      |  Logical  |     &&    |
                   |            |    AND    |           |
                   +------------+-----------+-----------+
-                  |     1      |  Logical  |    \|\|   |
+                  |     1      |  Logical  |     ||    |
                   |            |     OR    |           |
                   +------------+-----------+-----------+
 
                         Table 5: Filter expression
                            operator precedence
 
-3.5.9.2.  Semantics
+Semantics
 
    The filter-selector works with arrays and objects exclusively.  Its
    result might be a list of _zero_, _one_, _multiple_ or _all_ of their
    element or member values then.  Applied to other value types, it will
    select nothing.
+
+   *FIXME*: The zero number/empty string exceptions are no longer true.
+   Booleans work the same everywhere.
 
    Negation operator neg-op allows to test _falsiness_ of values.
 
@@ -1204,6 +1202,10 @@ Semantics
               DOI 10.17487/RFC5234, January 2008,
               <https://datatracker.ietf.org/doc/html/rfc5234>.
 
+   [RFC7493]  Bray, T., Ed., "The I-JSON Message Format", RFC 7493,
+              DOI 10.17487/RFC7493, March 2015,
+              <https://datatracker.ietf.org/doc/html/rfc7493>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://datatracker.ietf.org/doc/html/rfc8174>.
@@ -1246,6 +1248,148 @@ Semantics
               (XPath) 2.0 (Second Edition)", World Wide Web Consortium
               Recommendation REC-xpath20-20101214, 14 December 2010,
               <https://www.w3.org/TR/2010/REC-xpath20-20101214>.
+
+Appendix A.  Inspired by XPath
+
+   This appendix is informative.
+
+   At the time JSONPath was invented, XML was noted for the availability
+   of powerful tools to analyse, transform and selectively extract data
+   from XML documents.  [XPath] is one of these tools.
+
+   In 2007, the need for something solving the same class of problems
+   for the emerging JSON community became apparent, specifically for:
+
+   *  Finding data interactively and extracting them out of [RFC8259]
+      JSON values without special scripting.
+
+   *  Specifying the relevant parts of the JSON data in a request by a
+      client, so the server can reduce the amount of data in its
+      response, minimizing bandwidth usage.
+
+   (Note that XPath has evolved since 2007, and recent versions even
+   nominally support operating inside JSON values.  This appendix only
+   discusses the more widely used version of XPath that was available in
+   2007.)
+
+   JSONPath picks up the overall feeling of XPath, but maps the concepts
+   to syntax (and partially semantics) that would be familiar to someone
+   using JSON in a dynamic language.
+
+   E.g., in popular dynamic programming languages such as JavaScript,
+   Python and PHP, the semantics of the XPath expression
+
+   /store/book[1]/title
+
+   can be realized in the expression
+
+   x.store.book[0].title
+
+   or, in bracket notation,
+
+   x['store']['book'][0]['title']
+
+   with the variable x holding the argument.
+
+   The JSONPath language was designed to:
+
+   *  be naturally based on those language characteristics;
+
+   *  cover only the most essential parts of XPath 1.0;
+
+   *  be lightweight in code size and memory consumption;
+
+   *  be runtime efficient.
+
+A.1.  JSONPath and XPath
+
+   JSONPath expressions apply to JSON values in the same way as XPath
+   expressions are used in combination with an XML document.  JSONPath
+   uses $ to refer to the root node of the argument, similar to XPath's
+   / at the front.
+
+   JSONPath expressions move further down the hierarchy using _dot
+   notation_ ($.store.book[0].title) or the _bracket notation_
+   ($['store']['book'][0]['title']), a lightweight/limited, and a more
+   heavyweight syntax replacing XPath's / within query expressions.
+
+   Both JSONPath and XPath use * for a wildcard.  The descendant
+   operator .., borrowed from [E4X], is similar to XPath's //. The array
+   slicing construct [start:end:step] is unique to JSONPath, inspired by
+   [SLICE] from ECMASCRIPT 4.
+
+   The JSONPath expression language originally was less well defined.
+   It is always written in parentheses: (<expr>), and can be used for
+   indexing:
+
+   $.store.book[(@.length-1)].title
+
+   The symbol @ is used for the current node, compare . in XPath.
+   Filter expressions are supported via the syntax ?(<boolean expr>) as
+   in
+
+   $.store.book[?(@.price < 10)].title
+
+   Table 8 extends Table 1 by providing a comparison with similar XPath
+   concepts.
+
+   +==========+==================+=====================================+
+   | XPath    | JSONPath         | Description                         |
+   +==========+==================+=====================================+
+   | /        | $                | the root element/node               |
+   +----------+------------------+-------------------------------------+
+   | .        | @                | the current element/node            |
+   +----------+------------------+-------------------------------------+
+   | /        | . or []          | child operator                      |
+   +----------+------------------+-------------------------------------+
+   | ..       | n/a              | parent operator                     |
+   +----------+------------------+-------------------------------------+
+   | //       | ..               | nested descendants (JSONPath        |
+   |          |                  | borrows this syntax from E4X)       |
+   +----------+------------------+-------------------------------------+
+   | *        | *                | wildcard: All elements/nodes        |
+   |          |                  | regardless of their names           |
+   +----------+------------------+-------------------------------------+
+   | @        | n/a              | attribute access: JSON values       |
+   |          |                  | do not have attributes              |
+   +----------+------------------+-------------------------------------+
+   | []       | []               | subscript operator: XPath uses      |
+   |          |                  | it to iterate over element          |
+   |          |                  | collections and for                 |
+   |          |                  | predicates; native array            |
+   |          |                  | indexing as in JavaScript here      |
+   +----------+------------------+-------------------------------------+
+   | |        | [,]              | Union operator in XPath             |
+   |          |                  | (results in a combination of        |
+   |          |                  | node sets); JSONPath allows         |
+   |          |                  | alternate names or array            |
+   |          |                  | indices as a set                    |
+   +----------+------------------+-------------------------------------+
+   | n/a      | [start:end:step] | array slice operator borrowed       |
+   |          |                  | from ES4                            |
+   +----------+------------------+-------------------------------------+
+   | []       | ?()              | applies a filter (script)           |
+   |          |                  | expression                          |
+   +----------+------------------+-------------------------------------+
+   | seamless | ()               | expression engine                   |
+   +----------+------------------+-------------------------------------+
+   | ()       | n/a              | grouping in Xpath                   |
+   +----------+------------------+-------------------------------------+
+
+            Table 8: Overview over JSONPath, comparing to XPath
+
+   XPath has a lot more functionality (location paths in unabbreviated
+   syntax, operators and functions) than listed in this comparison.
+   Moreover, there is a significant difference how the subscript
+   operator works in Xpath and JSONPath:
+
+   *  Square brackets in XPath expressions always operate on the _node
+      set_ resulting from the previous path fragment.  Indices always
+      start at 1.
+
+   *  With JSONPath, square brackets operate on the _object_ or _array_
+      addressed by the previous path fragment.  Array indices always
+      start at 0.
 
 Acknowledgements
 
