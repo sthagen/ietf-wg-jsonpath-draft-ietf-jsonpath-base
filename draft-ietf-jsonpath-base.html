@@ -9,7 +9,7 @@
 <meta content="Glyn Normington" name="author">
 <meta content="Carsten Bormann" name="author">
 <meta content="
-       JSONPath defines a string syntax for identifying values
+       JSONPath defines a string syntax for selecting and extracting values
 within a JavaScript Object Notation (JSON, RFC 8259) value. 
     " name="description">
 <meta content="xml2rfc 3.11.1" name="generator">
@@ -17,7 +17,7 @@ within a JavaScript Object Notation (JSON, RFC 8259) value.
 <meta content="draft-ietf-jsonpath-base-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.11.1
-    Python 3.9.5
+    Python 3.9.7
     appdirs 1.4.4
     ConfigArgParse 1.3
     google-i18n-address 2.5.0
@@ -25,13 +25,13 @@ within a JavaScript Object Notation (JSON, RFC 8259) value.
     intervaltree 3.1.0
     Jinja2 2.11.3
     kitchen 1.2.6
-    lxml 4.6.3
+    lxml 4.6.4
     pycountry 20.7.3
-    pyflakes 2.3.0
+    pyflakes 2.3.1
     PyYAML 5.4.1
-    requests 2.25.1
+    requests 2.26.0
     setuptools 52.0.0
-    six 1.15.0
+    six 1.16.0
 -->
 <link href="draft-ietf-jsonpath-base.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1047,7 +1047,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gössner, et al.</td>
-<td class="center">Expires 14 May 2022</td>
+<td class="center">Expires 2 June 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1060,12 +1060,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-jsonpath-base-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-11-10" class="published">10 November 2021</time>
+<time datetime="2021-11-29" class="published">29 November 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-05-14">14 May 2022</time></dd>
+<dd class="expires"><time datetime="2022-06-02">2 June 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1088,7 +1088,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <h1 id="title">JSONPath: Query expressions for JSON</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">JSONPath defines a string syntax for identifying values
+<p id="section-abstract-1">JSONPath defines a string syntax for selecting and extracting values
 within a JavaScript Object Notation (JSON, RFC 8259) value.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1096,11 +1096,12 @@ within a JavaScript Object Notation (JSON, RFC 8259) value.<a href="#section-abs
 <a href="#name-discussion-venues" class="section-name selfRef">Discussion Venues</a>
       </h2>
 <p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
-<p id="section-note.1-2">Discussion of this document takes place on the
-JSON Path Working Group mailing list (jsonpath@ietf.org),
-which is archived at <a href="https://mailarchive.ietf.org/arch/browse/jsonpath/">https://mailarchive.ietf.org/arch/browse/jsonpath/</a>.
-Source for this draft and an issue tracker can be found at
-<a href="https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath">https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-jsonpath</a>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        Discussion of this document takes place on the
+        JSON Path Working Group mailing list (<span><a href="mailto:jsonpath@ietf.org">mailto:jsonpath@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/jsonpath/">https://mailarchive.ietf.org/arch/browse/jsonpath/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">Source for this draft and an issue tracker can be found at
+        <span><a href="https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base">https://github.com/ietf-wg-jsonpath/draft-ietf-jsonpath-base</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1121,7 +1122,7 @@ Source for this draft and an issue tracker can be found at
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 May 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 June 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1269,7 +1270,7 @@ within a JSON value.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">JSONPath is not intended as a replacement, but as a more powerful
 companion, to JSON Pointer <span>[<a href="#RFC6901" class="xref">RFC6901</a>]</span>. <span class="cref" id="json-pointer-missing">Insert reference to section where the relationship is detailed.
 The purposes of the two syntaxes are different.
-Pointer is for isolating a single location within a document.
+Pointer is for isolating a single location within a JSON document.
 Path is a query syntax that can also be used to pull multiple
 locations.</span><a href="#section-1-2" class="pilcrow">¶</a></p>
 <div id="terminology">
@@ -1300,8 +1301,9 @@ generic meaning, such as they would in a general programming context.<a href="#s
 Value:  </dt>
           <dd style="margin-left: 1.5em" id="section-1.1-5.2">
             <p id="section-1.1-5.2.1">As per <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span>, a structure complying to the generic data model of JSON, i.e.,
-composed of components such as containers, namely JSON objects and arrays, and
-atomic data, namely null, true, false, numbers, and text strings.<a href="#section-1.1-5.2.1" class="pilcrow">¶</a></p>
+composed of components such as structured values, namely JSON objects and arrays, and
+primitive data, namely numbers and text strings as well as the special
+values null, true, and false.<a href="#section-1.1-5.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-5.3">
@@ -1330,7 +1332,10 @@ context for XML elements.)<a href="#section-1.1-5.8.1" class="pilcrow">¶</a></p
 <dt id="section-1.1-5.9">
 Index:  </dt>
           <dd style="margin-left: 1.5em" id="section-1.1-5.10">
-            <p id="section-1.1-5.10.1">A non-negative integer that identifies a specific element in an array.<a href="#section-1.1-5.10.1" class="pilcrow">¶</a></p>
+            <p id="section-1.1-5.10.1">A non-negative integer that identifies a specific element in an array.
+Note that the term <em>indexing</em> is also used for accessing elements
+using negative integers (<a href="#index-semantics" class="xref">Section "Semantics"</a>), and for accessing
+member values in an object using their member name.<a href="#section-1.1-5.10.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-1.1-5.11">
@@ -1408,7 +1413,7 @@ may also be referred to as the type of the node.)<a href="#section-1.1-7" class=
         <h3 id="name-history">
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-history" class="section-name selfRef">History</a>
         </h3>
-<p id="section-1.2-1">This document picks up Stefan Goessner's popular JSONPath specification
+<p id="section-1.2-1">This document picks up Stefan Goessner's popular JSONPath proposal
 dated 2007-02-21 <span>[<a href="#JSONPath-orig" class="xref">JSONPath-orig</a>]</span> and provides a normative definition
 for it.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 <p id="section-1.2-2"><a href="#inspired-by-xpath" class="xref">Appendix A</a> provides a brief synopsis with XML's XPath
@@ -1742,24 +1747,35 @@ be used with a comparable XML document; see also <a href="#xpath-overview" class
         <h3 id="name-overview">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-overview" class="section-name selfRef">Overview</a>
         </h3>
-<p id="section-3.1-1">A JSONPath query is a string which selects zero or more nodes of a piece of JSON.
-A valid query conforms to the ABNF syntax defined by this document.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">A query <span class="bcp14">MUST</span> be encoded using UTF-8. To parse a query according to
-the grammar in this document, its UTF-8 form <span class="bcp14">SHOULD</span> first be decoded into
+<p id="section-3.1-1">A JSONPath query is a string which selects zero or more nodes of a piece of JSON.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">A query <span class="bcp14">MUST</span> be encoded using UTF-8.
+The grammar for queries given in this document assumes that its UTF-8 form is first decoded into
 Unicode code points as described
-in <span>[<a href="#RFC3629" class="xref">RFC3629</a>]</span>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+in <span>[<a href="#RFC3629" class="xref">RFC3629</a>]</span>; implementation approaches that lead to an equivalent
+result are possible.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">A string to be used as a JSONPath query needs to be <em>well-formed</em> and
 <em>valid</em>.
-A string is a well-formed JSONPath query if it conforms to the syntax
-of JSONPath.
+A string is a well-formed JSONPath query if it conforms to the ABNF syntax in this document.
 A well-formed JSONPath query is valid if it also fulfills all semantic
 requirements posed by this document.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
-<p id="section-3.1-4">The well-formedness and the validity of JSONPath queries are independent of
-the value the query is applied to; no further errors can be
-raised during application of the query to a value.<a href="#section-3.1-4" class="pilcrow">¶</a></p>
-<p id="section-3.1-5">(Obviously, an implementation can still fail when executing a JSONPath
+<p id="section-3.1-4">To be valid, integer numbers in the JSONPath query that are relevant
+to the JSONPath processing (e.g., index values and steps) <span class="bcp14">MUST</span> be
+within the range of exact values defined in I-JSON <span>[<a href="#RFC7493" class="xref">RFC7493</a>]</span>, namely
+within the interval [-(2<sup>53</sup>)+1, (2<sup>53</sup>)-1]).<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<p id="section-3.1-5">The well-formedness and the validity of JSONPath queries are independent of
+the JSON value the query is applied to; no further errors can be
+raised during application of the query to a value.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1-6">Obviously, an implementation can still fail when executing a JSONPath
 query, e.g., because of resource depletion, but this is not modeled in
-the present specification.)<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+the present specification.  However, the implementation <span class="bcp14">MUST NOT</span>
+silently malfunction.  Specifically, if a valid JSONPath query is
+evaluated against a structured value whose size doesn't fit in the
+range of exact values, interfering with the correct interpretation of
+the query, the implementation <span class="bcp14">MUST</span> provide an indication of overflow.<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+<p id="section-3.1-7">(Readers familiar with the HTTP error model may be reminded of 400
+type errors when pondering well-formedness and validity, while
+resource depletion and related errors are comparable to 500 type
+errors.)<a href="#section-3.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="processing-model">
@@ -1770,8 +1786,8 @@ the present specification.)<a href="#section-3.1-5" class="pilcrow">¶</a></p>
 <p id="section-3.2-1">In this specification, the semantics of a JSONPath query are defined
 in terms of a <em>processing model</em>.  That model is not prescriptive of
 the internal workings of an implementation:  Implementations may wish
-(or need) to design a different process that yields results that
-conform to the model.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+(or need) to design a different process that yields results that are
+consistent with this model.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">In the processing model,
 a valid query is executed against a value, the <em>argument</em>, and
 produces a list of zero or more nodes of the value.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
@@ -1876,17 +1892,19 @@ of node.<a href="#section-3.4-12" class="pilcrow">¶</a></p>
         </h3>
 <p id="section-3.5-1">A JSONPath query consists of a sequence of selectors. Valid selectors are<a href="#section-3.5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.5-2.1">Root selector <code>$</code><a href="#section-3.5-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-3.5-2.1">Root selector <code>$</code> (used at the start of a query and in expressions)<a href="#section-3.5-2.1" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-3.5-2.2">Dot selector <code>.&lt;name&gt;</code>, used with object member names exclusively.<a href="#section-3.5-2.2" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-3.5-2.3">Dot wild card selector <code>.*</code>.<a href="#section-3.5-2.3" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.5-2.4">Index selector <code>[&lt;index&gt;]</code>, where <code>&lt;index&gt;</code> is either an (possibly negative) array index or an object member name.<a href="#section-3.5-2.4" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.5-2.4">Index selector <code>[&lt;index&gt;]</code>, where <code>&lt;index&gt;</code> is either a (possibly
+negative, see <a href="#index-semantics" class="xref">Section "Semantics"</a>) array index or an object member name.<a href="#section-3.5-2.4" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-3.5-2.5">Index wild card selector <code>[*]</code>.<a href="#section-3.5-2.5" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.5-2.6">Array slice selector <code>[&lt;start&gt;:&lt;end&gt;:&lt;step&gt;]</code>, where <code>&lt;start&gt;</code>, <code>&lt;end&gt;</code>, <code>&lt;step&gt;</code> are integer literals.<a href="#section-3.5-2.6" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.5-2.6">Array slice selector <code>[&lt;start&gt;:&lt;end&gt;:&lt;step&gt;]</code>, where the optional
+values <code>&lt;start&gt;</code>, <code>&lt;end&gt;</code>, and <code>&lt;step&gt;</code> are integer literals.<a href="#section-3.5-2.6" class="pilcrow">¶</a>
 </li>
           <li class="normal" id="section-3.5-2.7">Nested descendants selector <code>..</code>.<a href="#section-3.5-2.7" class="pilcrow">¶</a>
 </li>
@@ -1894,7 +1912,7 @@ of node.<a href="#section-3.4-12" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-3.5-2.9">Filter selector <code>[?(&lt;expr&gt;)]</code><a href="#section-3.5-2.9" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-3.5-2.10">Current item selector <code>@</code><a href="#section-3.5-2.10" class="pilcrow">¶</a>
+          <li class="normal" id="section-3.5-2.10">Current item selector <code>@</code> (used in expressions)<a href="#section-3.5-2.10" class="pilcrow">¶</a>
 </li>
         </ul>
 <div id="root-selector">
@@ -1951,11 +1969,11 @@ DIGIT           =  %x30-39              ; 0-9
 ALPHA           =  %x41-5A / %x61-7A    ; A-Z / a-z
 </pre><a href="#section-3.5.2.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.5.2.1-3">Member names containing other characters than allowed by
-<code>dot-selector</code> -- such as space ` ` and minus <code>-</code>
-characters -- <span class="bcp14">MUST NOT</span> be used with the <code>dot-selector</code>.
+<p id="section-3.5.2.1-3">Member names containing characters other than allowed by
+<code>dot-selector</code> -- such as space ` <code>, minus </code>-<code>, or dot </code>.<code>
+characters -- MUST NOT be used with the </code>dot-selector<code>.
 (Such member names can be addressed by the
-<code>index-selector</code> instead.)<a href="#section-3.5.2.1-3" class="pilcrow">¶</a></p>
+</code>index-selector` instead.)<a href="#section-3.5.2.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="semantics-2">
@@ -1963,7 +1981,8 @@ characters -- <span class="bcp14">MUST NOT</span> be used with the <code>dot-sel
             <h5 id="name-semantics-3">
 <a href="#name-semantics-3" class="section-name selfRef">Semantics</a>
             </h5>
-<p id="section-3.5.2.2-1">The <code>dot-selector</code> selects the node of the member value corresponding to the member name from any JSON object. It selects no nodes from any other JSON value.<a href="#section-3.5.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.2.2-1">The <code>dot-selector</code> selects the node of the member value corresponding
+to the member name from any JSON object in its input nodelist. It selects no nodes from any other JSON value.<a href="#section-3.5.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.5.2.2-2">Note that the <code>dot-selector</code> follows the philosophy of JSON strings and is
 allowed to contain bit sequences that cannot encode Unicode characters (a
 single unpaired UTF-16 surrogate, for example).
@@ -1983,7 +2002,8 @@ not encode Unicode characters.<a href="#section-3.5.2.2-2" class="pilcrow">¶</a
             <h5 id="name-syntax-4">
 <a href="#name-syntax-4" class="section-name selfRef">Syntax</a>
             </h5>
-<p id="section-3.5.3.1-1">The dot wild card selector has the form <code>.*</code>.<a href="#section-3.5.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.3.1-1">The dot wild card selector has the form <code>.*</code> as defined in the
+following syntax:<a href="#section-3.5.3.1-1" class="pilcrow">¶</a></p>
 <div id="section-3.5.3.1-2">
 <pre class="lang-abnf sourcecode">
 dot-wild-selector    = "." "*"            ;  dot followed by asterisk
@@ -1996,8 +2016,9 @@ dot-wild-selector    = "." "*"            ;  dot followed by asterisk
             <h5 id="name-semantics-4">
 <a href="#name-semantics-4" class="section-name selfRef">Semantics</a>
             </h5>
-<p id="section-3.5.3.2-1">A <code>dot-wild-selector</code> acts as a wild card by selecting the nodes of all member values of an object as well as all element nodes of
-an array.
+<p id="section-3.5.3.2-1">A <code>dot-wild-selector</code> acts as a wild card by selecting the nodes of
+all member values of an object in its input nodelist as well as all
+element nodes of an array in its input nodelist.
 Applying the <code>dot-wild-selector</code> to a primitive JSON value (number,
 string, or true/false/null) selects no node.<a href="#section-3.5.3.2-1" class="pilcrow">¶</a></p>
 </section>
@@ -2009,7 +2030,7 @@ string, or true/false/null) selects no node.<a href="#section-3.5.3.2-1" class="
           <h4 id="name-index-selector">
 <a href="#section-3.5.4" class="section-number selfRef">3.5.4. </a><a href="#name-index-selector" class="section-name selfRef">Index Selector</a>
           </h4>
-<div id="syntax-4">
+<div id="syntax-index">
 <section id="section-3.5.4.1">
             <h5 id="name-syntax-5">
 <a href="#name-syntax-5" class="section-name selfRef">Syntax</a>
@@ -2020,7 +2041,11 @@ string, or true/false/null) selects no node.<a href="#section-3.5.3.2-1" class="
 index-selector      = "[" S (quoted-member-name / element-index) S "]"
 </pre><a href="#section-3.5.4.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.5.4.1-3">Applying the <code>index-selector</code> to an object value, a <code>quoted-member-name</code> string is required. JSONPath allows it to be enclosed in <em>single</em> or <em>double</em> quotes.<a href="#section-3.5.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.5.4.1-3">Applying the <code>index-selector</code> to an object value in its input nodelist, a
+<code>quoted-member-name</code> string is required to select the corresponding
+member value.
+In contrast to JSON,
+the JSONPath syntax allows strings to be enclosed in <em>single</em> or <em>double</em> quotes.<a href="#section-3.5.4.1-3" class="pilcrow">¶</a></p>
 <div id="section-3.5.4.1-4">
 <pre class="lang-abnf sourcecode">
 quoted-member-name  = string-literal
@@ -2067,7 +2092,9 @@ HEXDIG = DIGIT / "A" / "B" / "C" / "D" / "E" / "F"
 ; Task from 2021-06-15 interim: update ABNF later
 </pre><a href="#section-3.5.4.1-4" class="pilcrow">¶</a>
 </div>
-<p id="section-3.5.4.1-5">Applying the <code>index-selector</code> to an array, a numerical <code>element-index</code> is required. JSONPath allows it to be negative.<a href="#section-3.5.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.5.4.1-5">Applying the <code>index-selector</code> to an array, a numerical <code>element-index</code>
+is required to select the corresponding
+element. JSONPath allows it to be negative (see <a href="#index-semantics" class="xref">Section "Semantics"</a>).<a href="#section-3.5.4.1-5" class="pilcrow">¶</a></p>
 <div id="section-3.5.4.1-6">
 <pre class="lang-abnf sourcecode">
 element-index   = int                             ; decimal integer
@@ -2077,13 +2104,13 @@ DIGIT1          = %x31-39                         ; 1-9 non-zero digit
 </pre><a href="#section-3.5.4.1-6" class="pilcrow">¶</a>
 </div>
 <p id="section-3.5.4.1-7">Notes:
-1. <code>double-quoted</code> strings follow JSON in <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span>;
-   <code>single-quoted</code> strings follow an analogous pattern.
+1. <code>double-quoted</code> strings follow the JSON string syntax (<span><a href="https://rfc-editor.org/rfc/rfc8259#section-7" class="relref">Section 7</a> of [<a href="#RFC8259" class="xref">RFC8259</a>]</span>);
+   <code>single-quoted</code> strings follow an analogous pattern (<a href="#syntax-index" class="xref">Section "Syntax"</a>).
 2. An <code>element-index</code> is an integer (in base 10, as in JSON numbers).
 3. As in JSON numbers, the syntax does not allow octal-like integers with leading zeros such as <code>01</code> or <code>-01</code>.<a href="#section-3.5.4.1-7" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="semantics-4">
+<div id="index-semantics">
 <section id="section-3.5.4.2">
             <h5 id="name-semantics-5">
 <a href="#name-semantics-5" class="section-name selfRef">Semantics</a>
@@ -2163,7 +2190,9 @@ Nothing is selected from a value which is not a object.<a href="#section-3.5.4.2
 <p id="section-3.5.4.2-4">Array indexing via <code>element-index</code> is a way of selecting a particular array element using a zero-based index.
 For example, selector <code>[0]</code> selects the first and selector <code>[4]</code> the fifth element of a sufficiently long array.<a href="#section-3.5.4.2-4" class="pilcrow">¶</a></p>
 <p id="section-3.5.4.2-5">A negative <code>element-index</code> counts from the array end.
-For example, selector <code>[-1]</code> selects the last and selector <code>[-2]</code> selects the last but one element of an array with at least two elements.<a href="#section-3.5.4.2-5" class="pilcrow">¶</a></p>
+For example, selector <code>[-1]</code> selects the last and selector <code>[-2]</code> selects the penultimate element of an array with at least two elements.
+As with non-negative indexes, it is not an error if such an element does
+not exist; this simply means that no element is selected.<a href="#section-3.5.4.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2173,7 +2202,7 @@ For example, selector <code>[-1]</code> selects the last and selector <code>[-2]
           <h4 id="name-index-wild-card-selector">
 <a href="#section-3.5.5" class="section-number selfRef">3.5.5. </a><a href="#name-index-wild-card-selector" class="section-name selfRef">Index Wild Card Selector</a>
           </h4>
-<div id="syntax-5">
+<div id="syntax-4">
 <section id="section-3.5.5.1">
             <h5 id="name-syntax-6">
 <a href="#name-syntax-6" class="section-name selfRef">Syntax</a>
@@ -2186,7 +2215,7 @@ index-wild-selector    = "[" "*" "]"  ;  asterisk enclosed by brackets
 </div>
 </section>
 </div>
-<div id="semantics-5">
+<div id="semantics-4">
 <section id="section-3.5.5.2">
             <h5 id="name-semantics-6">
 <a href="#name-semantics-6" class="section-name selfRef">Semantics</a>
@@ -2206,7 +2235,7 @@ a number, string, or true/false/null) selects no node.<a href="#section-3.5.5.2-
           <h4 id="name-array-slice-selector">
 <a href="#section-3.5.6" class="section-number selfRef">3.5.6. </a><a href="#name-array-slice-selector" class="section-name selfRef">Array Slice Selector</a>
           </h4>
-<div id="syntax-6">
+<div id="syntax-5">
 <section id="section-3.5.6.1">
             <h5 id="name-syntax-7">
 <a href="#name-syntax-7" class="section-name selfRef">Syntax</a>
@@ -2234,7 +2263,7 @@ RS             = 1*B       ; required blank space
 <p id="section-3.5.6.1-3">The <code>slice-selector</code> consists of three optional decimal integers separated by colons.<a href="#section-3.5.6.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="semantics-6">
+<div id="semantics-5">
 <section id="section-3.5.6.2">
             <h5 id="name-semantics-7">
 <a href="#name-semantics-7" class="section-name selfRef">Semantics</a>
@@ -2265,8 +2294,8 @@ for example, <code>[5:1:-2]</code> selects elements with indices <code>5</code> 
 that order and <code>[::-1]</code> selects all the elements of an array in
 reverse order.<a href="#section-3.5.6.2.1-6" class="pilcrow">¶</a></p>
 <p id="section-3.5.6.2.1-7">When <code>step</code> is <code>0</code>, no elements are selected.
-This is the one case which differs from the behaviour of Python, which
-raises an error in this case.<a href="#section-3.5.6.2.1-7" class="pilcrow">¶</a></p>
+(This is the one case which differs from the behaviour of Python, which
+raises an error in this case.)<a href="#section-3.5.6.2.1-7" class="pilcrow">¶</a></p>
 <p id="section-3.5.6.2.1-8">The following section specifies the behaviour fully, without depending on
 JavaScript or Python behaviour.<a href="#section-3.5.6.2.1-8" class="pilcrow">¶</a></p>
 </section>
@@ -2377,13 +2406,8 @@ END IF
 </pre><a href="#section-3.5.6.2.2-12" class="pilcrow">¶</a>
 </div>
 <p id="section-3.5.6.2.2-13">When <code>step = 0</code>, no elements are selected and the result array is empty.<a href="#section-3.5.6.2.2-13" class="pilcrow">¶</a></p>
-<p id="section-3.5.6.2.2-14">An implementation <span class="bcp14">MUST</span> raise an error if any of the slice expression parameters
-does not fit in
-the implementation's representation of an integer.
-If a successfully parsed slice expression is evaluated against an array whose
-size doesn't
-fit in the implementation's representation of an integer, the implementation
-<span class="bcp14">MUST</span> raise an error.<a href="#section-3.5.6.2.2-14" class="pilcrow">¶</a></p>
+<p id="section-3.5.6.2.2-14">To be valid, the slice expression parameters <span class="bcp14">MUST</span> be in the I-JSON
+range of exact values, see <a href="#synsem-overview" class="xref">Section 3.1</a>.<a href="#section-3.5.6.2.2-14" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2395,7 +2419,7 @@ fit in the implementation's representation of an integer, the implementation
           <h4 id="name-descendant-selector">
 <a href="#section-3.5.7" class="section-number selfRef">3.5.7. </a><a href="#name-descendant-selector" class="section-name selfRef">Descendant Selector</a>
           </h4>
-<div id="syntax-7">
+<div id="syntax-6">
 <section id="section-3.5.7.1">
             <h5 id="name-syntax-8">
 <a href="#name-syntax-8" class="section-name selfRef">Syntax</a>
@@ -2414,7 +2438,7 @@ descendant-selector = ".." ( dot-member-name      /  ; ..&lt;name&gt;
 </div>
 </section>
 </div>
-<div id="semantics-7">
+<div id="semantics-6">
 <section id="section-3.5.7.2">
             <h5 id="name-semantics-8">
 <a href="#name-semantics-8" class="section-name selfRef">Semantics</a>
@@ -2433,12 +2457,14 @@ descendant-selector = ".." ( dot-member-name      /  ; ..&lt;name&gt;
           <h4 id="name-union-selector">
 <a href="#section-3.5.8" class="section-number selfRef">3.5.8. </a><a href="#name-union-selector" class="section-name selfRef">Union Selector</a>
           </h4>
-<div id="syntax-8">
+<div id="syntax-7">
 <section id="section-3.5.8.1">
             <h5 id="name-syntax-9">
 <a href="#name-syntax-9" class="section-name selfRef">Syntax</a>
             </h5>
-<p id="section-3.5.8.1-1">The union selector is syntactically related to the <code>index-selector</code>. It contains multiple, comma separated entries.<a href="#section-3.5.8.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.8.1-1">The union selector is syntactically related to the
+<code>index-selector</code>.
+It contains two or more entries, separated by commas.<a href="#section-3.5.8.1-1" class="pilcrow">¶</a></p>
 <div id="section-3.5.8.1-2">
 <pre class="lang-abnf sourcecode">
 union-selector = "[" S union-entry 1*(S "," S union-entry) S "]"
@@ -2449,21 +2475,9 @@ union-entry    =  ( quoted-member-name /
                   )
 </pre><a href="#section-3.5.8.1-2" class="pilcrow">¶</a>
 </div>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-3.5.8.1-3.1">
-                <p id="section-3.5.8.1-3.1.1">Task (T1): This, besides slice-index, is currently one of only two
-places in the document that mentions whitespace.  Whitespace needs
-to be handled throughout the ABNF syntax.  Room Consensus at the
-2021-06-15 interim was that JSONPath generally is generous with
-allowing insignificant whitespace throughout.  Minimizing the impact
-of the many whitespace insertion points by choosing a rule name such
-as "S" was mentioned.  Some conventions will probably help with
-minimizing the number of places where S needs to be inserted.<a href="#section-3.5.8.1-3.1.1" class="pilcrow">¶</a></p>
-</li>
-            </ul>
 </section>
 </div>
-<div id="semantics-8">
+<div id="semantics-7">
 <section id="section-3.5.8.2">
             <h5 id="name-semantics-9">
 <a href="#name-semantics-9" class="section-name selfRef">Semantics</a>
@@ -2472,6 +2486,9 @@ minimizing the number of places where S needs to be inserted.<a href="#section-3
 lists (in the order of the selectors) of nodes selected by the union elements.
 Note that any node selected in more than one of the union selectors is kept
 as many times in the node list.<a href="#section-3.5.8.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.5.8.2-2">To be valid, integer values in the <code>element-index</code> and <code>slice-index</code>
+components <span class="bcp14">MUST</span> be in the I-JSON range of exact values, see
+<a href="#synsem-overview" class="xref">Section 3.1</a>.<a href="#section-3.5.8.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2481,7 +2498,7 @@ as many times in the node list.<a href="#section-3.5.8.2-1" class="pilcrow">¶</
           <h4 id="name-filter-selector">
 <a href="#section-3.5.9" class="section-number selfRef">3.5.9. </a><a href="#name-filter-selector" class="section-name selfRef">Filter Selector</a>
           </h4>
-<div id="syntax-9">
+<div id="syntax-8">
 <section id="section-3.5.9.1">
             <h5 id="name-syntax-10">
 <a href="#name-syntax-10" class="section-name selfRef">Syntax</a>
@@ -2546,7 +2563,10 @@ container    = path /                                 ; resolves to array
               <li class="normal" id="section-3.5.9.1-7.3">Types are not implicitly converted in comparisons.
 So <code>"13 == '13'"</code> selects no node.<a href="#section-3.5.9.1-7.3" class="pilcrow">¶</a>
 </li>
-              <li class="normal" id="section-3.5.9.1-7.4">A member or element value by itself is <em>falsy</em> only, if it does not exist. Otherwise it is <em>truthy</em>, resulting in its value. To be more specific explicit comparisons are necessary. This existence test -- as an exception of the general rule -- also works with structured values.<a href="#section-3.5.9.1-7.4" class="pilcrow">¶</a>
+              <li class="normal" id="section-3.5.9.1-7.4">A member or element value by itself in a Boolean context is
+interpreted as <code>false</code> only if it does not exist.
+Otherwise it is interpreted as <code>true</code>.
+To be more specific about the actual value, explicit comparisons are necessary. This existence test -- as an exception to the general rule -- also works with structured values.<a href="#section-3.5.9.1-7.4" class="pilcrow">¶</a>
 </li>
               <li class="normal" id="section-3.5.9.1-7.5">Regular expression tests can be applied to <code>string</code> values only.<a href="#section-3.5.9.1-7.5" class="pilcrow">¶</a>
 </li>
@@ -2601,20 +2621,21 @@ So <code>"13 == '13'"</code> selects no node.<a href="#section-3.5.9.1-7.3" clas
                   <td class="text-center" rowspan="1" colspan="1">1</td>
                   <td class="text-center" rowspan="1" colspan="1">Logical OR</td>
                   <td class="text-center" rowspan="1" colspan="1">
-                    <code>\|\|</code>
+                    <code>||</code>
 </td>
                 </tr>
               </tbody>
             </table>
 </section>
 </div>
-<div id="semantics-9">
+<div id="semantics-8">
 <section id="section-3.5.9.2">
             <h5 id="name-semantics-10">
 <a href="#name-semantics-10" class="section-name selfRef">Semantics</a>
             </h5>
 <p id="section-3.5.9.2-1">The <code>filter-selector</code> works with arrays and objects exclusively. Its result might be a list of <em>zero</em>, <em>one</em>, <em>multiple</em> or <em>all</em> of their element or member values then. Applied to other value types, it will select nothing.<a href="#section-3.5.9.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.5.9.2-2">Negation operator <code>neg-op</code> allows to test <em>falsiness</em> of values.<a href="#section-3.5.9.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.5.9.2-2"><strong>FIXME</strong>: The zero number/empty string exceptions are no longer true.  Booleans work the same everywhere.<a href="#section-3.5.9.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.5.9.2-3">Negation operator <code>neg-op</code> allows to test <em>falsiness</em> of values.<a href="#section-3.5.9.2-3" class="pilcrow">¶</a></p>
 <span id="name-test-falsiness-of-json-valu"></span><table class="center" id="table-6">
               <caption>
 <a href="#table-6" class="selfRef">Table 6</a>:
@@ -2711,8 +2732,8 @@ So <code>"13 == '13'"</code> selects no node.<a href="#section-3.5.9.1-7.3" clas
                 </tr>
               </tbody>
             </table>
-<p id="section-3.5.9.2-4">Applying negation operator twice <code>!!</code> gives us <em>truthiness</em> of values.<a href="#section-3.5.9.2-4" class="pilcrow">¶</a></p>
-<p id="section-3.5.9.2-5">Some examples:<a href="#section-3.5.9.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.5.9.2-5">Applying negation operator twice <code>!!</code> gives us <em>truthiness</em> of values.<a href="#section-3.5.9.2-5" class="pilcrow">¶</a></p>
+<p id="section-3.5.9.2-6">Some examples:<a href="#section-3.5.9.2-6" class="pilcrow">¶</a></p>
 <table class="center" id="table-7">
               <caption><a href="#table-7" class="selfRef">Table 7</a></caption>
 <thead>
@@ -2888,6 +2909,10 @@ true  = %x74.72.75.65      ; true
         <dd>
 <span class="refAuthor">Crocker, D., Ed.</span> and <span class="refAuthor">P. Overell</span>, <span class="refTitle">"Augmented BNF for Syntax Specifications: ABNF"</span>, <span class="seriesInfo">STD 68</span>, <span class="seriesInfo">RFC 5234</span>, <span class="seriesInfo">DOI 10.17487/RFC5234</span>, <time datetime="2008-01" class="refDate">January 2008</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc5234">https://datatracker.ietf.org/doc/html/rfc5234</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC7493">[RFC7493]</dt>
+        <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The I-JSON Message Format"</span>, <span class="seriesInfo">RFC 7493</span>, <span class="seriesInfo">DOI 10.17487/RFC7493</span>, <time datetime="2015-03" class="refDate">March 2015</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc7493">https://datatracker.ietf.org/doc/html/rfc7493</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/rfc8174">https://datatracker.ietf.org/doc/html/rfc8174</a>&gt;</span>. </dd>
@@ -2955,38 +2980,42 @@ client, so the server can reduce the amount of data in its response,
 minimizing bandwidth usage.<a href="#appendix-A-4.2" class="pilcrow">¶</a>
 </li>
       </ul>
-<p id="appendix-A-5">JSONPath picks up the overall feeling of XPath, but maps the concepts
+<p id="appendix-A-5">(Note that XPath has evolved since 2007, and recent versions even
+nominally support operating inside JSON values.
+This appendix only discusses the more widely used version of XPath
+that was available in 2007.)<a href="#appendix-A-5" class="pilcrow">¶</a></p>
+<p id="appendix-A-6">JSONPath picks up the overall feeling of XPath, but maps the concepts
 to syntax (and partially semantics) that would be familiar to someone
-using JSON in a dynamic language.<a href="#appendix-A-5" class="pilcrow">¶</a></p>
-<p id="appendix-A-6">E.g., in popular dynamic programming languages such as JavaScript,
-Python and PHP, the semantics of the XPath expression<a href="#appendix-A-6" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-A-7">
+using JSON in a dynamic language.<a href="#appendix-A-6" class="pilcrow">¶</a></p>
+<p id="appendix-A-7">E.g., in popular dynamic programming languages such as JavaScript,
+Python and PHP, the semantics of the XPath expression<a href="#appendix-A-7" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-8">
 <pre>
 /store/book[1]/title
-</pre><a href="#appendix-A-7" class="pilcrow">¶</a>
+</pre><a href="#appendix-A-8" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A-8">can be realized in the expression<a href="#appendix-A-8" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-A-9">
+<p id="appendix-A-9">can be realized in the expression<a href="#appendix-A-9" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-10">
 <pre>
 x.store.book[0].title
-</pre><a href="#appendix-A-9" class="pilcrow">¶</a>
+</pre><a href="#appendix-A-10" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A-10">or, in bracket notation,<a href="#appendix-A-10" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="appendix-A-11">
+<p id="appendix-A-11">or, in bracket notation,<a href="#appendix-A-11" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A-12">
 <pre>
 x['store']['book'][0]['title']
-</pre><a href="#appendix-A-11" class="pilcrow">¶</a>
+</pre><a href="#appendix-A-12" class="pilcrow">¶</a>
 </div>
-<p id="appendix-A-12">with the variable x holding the argument.<a href="#appendix-A-12" class="pilcrow">¶</a></p>
-<p id="appendix-A-13">The JSONPath language was designed to:<a href="#appendix-A-13" class="pilcrow">¶</a></p>
+<p id="appendix-A-13">with the variable x holding the argument.<a href="#appendix-A-13" class="pilcrow">¶</a></p>
+<p id="appendix-A-14">The JSONPath language was designed to:<a href="#appendix-A-14" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="appendix-A-14.1">be naturally based on those language characteristics;<a href="#appendix-A-14.1" class="pilcrow">¶</a>
+<li class="normal" id="appendix-A-15.1">be naturally based on those language characteristics;<a href="#appendix-A-15.1" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-A-14.2">cover only the most essential parts of XPath 1.0;<a href="#appendix-A-14.2" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-A-15.2">cover only the most essential parts of XPath 1.0;<a href="#appendix-A-15.2" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-A-14.3">be lightweight in code size and memory consumption;<a href="#appendix-A-14.3" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-A-15.3">be lightweight in code size and memory consumption;<a href="#appendix-A-15.3" class="pilcrow">¶</a>
 </li>
-        <li class="normal" id="appendix-A-14.4">be runtime efficient.<a href="#appendix-A-14.4" class="pilcrow">¶</a>
+        <li class="normal" id="appendix-A-15.4">be runtime efficient.<a href="#appendix-A-15.4" class="pilcrow">¶</a>
 </li>
       </ul>
 <div id="xpath-overview">
@@ -3131,7 +3160,7 @@ with similar XPath concepts.<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
               <td class="text-left" rowspan="1" colspan="1">applies a filter (script) expression</td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">n/a</td>
+              <td class="text-left" rowspan="1" colspan="1">seamless</td>
               <td class="text-left" rowspan="1" colspan="1">
                 <code>()</code>
 </td>
@@ -3148,7 +3177,7 @@ with similar XPath concepts.<a href="#appendix-A.1-8" class="pilcrow">¶</a></p>
         </table>
 </div>
 <p id="appendix-A.1-10">XPath has a lot more functionality (location paths in unabbreviated syntax,
-operators and functions) than listed in this comparison.  Moreover there is a
+operators and functions) than listed in this comparison.  Moreover, there is a
 significant difference how the subscript operator works in Xpath and
 JSONPath:<a href="#appendix-A.1-10" class="pilcrow">¶</a></p>
 <ul class="normal">
