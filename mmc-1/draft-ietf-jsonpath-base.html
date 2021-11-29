@@ -1047,7 +1047,7 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Gössner, et al.</td>
-<td class="center">Expires 1 June 2022</td>
+<td class="center">Expires 2 June 2022</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1060,12 +1060,12 @@ svg [stroke="fill"], svg [fill^="#fff"] {
 <dd class="internet-draft">draft-ietf-jsonpath-base-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2021-11-28" class="published">28 November 2021</time>
+<time datetime="2021-11-29" class="published">29 November 2021</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2022-06-01">1 June 2022</time></dd>
+<dd class="expires"><time datetime="2022-06-02">2 June 2022</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1122,7 +1122,7 @@ within a JavaScript Object Notation (JSON, RFC 8259) value.<a href="#section-abs
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 1 June 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 2 June 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1749,14 +1749,13 @@ be used with a comparable XML document; see also <a href="#xpath-overview" class
         </h3>
 <p id="section-3.1-1">A JSONPath query is a string which selects zero or more nodes of a piece of JSON.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">A query <span class="bcp14">MUST</span> be encoded using UTF-8.
-The grammar for queries given in this document assumes that its UTF-8 form is first be decoded into
+The grammar for queries given in this document assumes that its UTF-8 form is first decoded into
 Unicode code points as described
 in <span>[<a href="#RFC3629" class="xref">RFC3629</a>]</span>; implementation approaches that lead to an equivalent
 result are possible.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 <p id="section-3.1-3">A string to be used as a JSONPath query needs to be <em>well-formed</em> and
 <em>valid</em>.
-A string is a well-formed JSONPath query if it conforms to the syntax
-of JSONPath, as defined by the ABNF syntax in this document.
+A string is a well-formed JSONPath query if it conforms to the ABNF syntax in this document.
 A well-formed JSONPath query is valid if it also fulfills all semantic
 requirements posed by this document.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
 <p id="section-3.1-4">To be valid, integer numbers in the JSONPath query that are relevant
@@ -1970,7 +1969,7 @@ DIGIT           =  %x30-39              ; 0-9
 ALPHA           =  %x41-5A / %x61-7A    ; A-Z / a-z
 </pre><a href="#section-3.5.2.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-3.5.2.1-3">Member names containing other characters than allowed by
+<p id="section-3.5.2.1-3">Member names containing characters other than allowed by
 <code>dot-selector</code> -- such as space ` <code>, minus </code>-<code>, or dot </code>.<code>
 characters -- MUST NOT be used with the </code>dot-selector<code>.
 (Such member names can be addressed by the

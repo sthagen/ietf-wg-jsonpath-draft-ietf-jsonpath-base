@@ -5,10 +5,10 @@
 JSONPath WG                                              S. Gössner, Ed.
 Internet-Draft                                   Fachhochschule Dortmund
 Intended status: Standards Track                      G. Normington, Ed.
-Expires: 1 June 2022                                                    
+Expires: 2 June 2022                                                    
                                                          C. Bormann, Ed.
                                                   Universität Bremen TZI
-                                                        28 November 2021
+                                                        29 November 2021
 
 
                   JSONPath: Query expressions for JSON
@@ -45,7 +45,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 1 June 2022.
+   This Internet-Draft will expire on 2 June 2022.
 
 Copyright Notice
 
@@ -399,15 +399,15 @@ Table of Contents
    piece of JSON.
 
    A query MUST be encoded using UTF-8.  The grammar for queries given
-   in this document assumes that its UTF-8 form is first be decoded into
+   in this document assumes that its UTF-8 form is first decoded into
    Unicode code points as described in [RFC3629]; implementation
    approaches that lead to an equivalent result are possible.
 
    A string to be used as a JSONPath query needs to be _well-formed_ and
    _valid_. A string is a well-formed JSONPath query if it conforms to
-   the syntax of JSONPath, as defined by the ABNF syntax in this
-   document.  A well-formed JSONPath query is valid if it also fulfills
-   all semantic requirements posed by this document.
+   the ABNF syntax in this document.  A well-formed JSONPath query is
+   valid if it also fulfills all semantic requirements posed by this
+   document.
 
    To be valid, integer numbers in the JSONPath query that are relevant
    to the JSONPath processing (e.g., index values and steps) MUST be
@@ -596,7 +596,7 @@ Syntax
    DIGIT           =  %x30-39              ; 0-9
    ALPHA           =  %x41-5A / %x61-7A    ; A-Z / a-z
 
-   Member names containing other characters than allowed by dot-selector
+   Member names containing characters other than allowed by dot-selector
    -- such as space ` , minus-, or dot.characters -- MUST NOT be used
    with thedot-selector.  (Such member names can be addressed by
    theindex-selector` instead.)
